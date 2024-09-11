@@ -1,3 +1,5 @@
+import CircularChart from "@/components/myApp/CircularChart";
+import Header from "@/components/myApp/Header";
 import { client } from "@/utils/KindeConfig";
 import services from "@/utils/services";
 import { supabase } from "@/utils/supabase";
@@ -28,18 +30,13 @@ export default function Home() {
       .select("*")
       .eq("created_by", email);
 
-    console.log("Data", Category);
+    //  console.log("Data", Category);
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View className="mt-5 p-5 bg-primary h-[150px]">
+      <Header />
+      <CircularChart />
       <Button onPress={handleLogout} title="Logout" />
     </View>
   );
