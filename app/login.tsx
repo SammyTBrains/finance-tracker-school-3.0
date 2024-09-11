@@ -30,10 +30,10 @@ const LoginScreen = () => {
     <View className="flex items-center">
       <Image source={loginBg} className="h-[400px] w-full" />
       <View className="bg-primary w-full h-full p-5 -m-[30px] rounded-tl-[20px] rounded-tr-[20px]">
-        <Text className="text-[35px] font-bold text-center text-white">
+        <Text className="text-[35px] font-[outfit-bold] text-center text-white">
           Personal Finance and Budget Planner
         </Text>
-        <Text className="text-[18px] text-center text-white mt-5">
+        <Text className="text-[18px] text-center text-white mt-5 font-[outfit] ">
           Stay on Track, Event by Event: The Best Way to Manage Your Finances
         </Text>
 
@@ -41,15 +41,17 @@ const LoginScreen = () => {
           className="bg-white p-5 px-[5px] rounded-full mt-[30px]"
           onPress={handleSignIn}
         >
-          <Text className="text-center text-primary font-bold">Login</Text>
+          <Text className="text-center text-primary font-[outfit-bold] ">
+            Login
+          </Text>
         </TouchableOpacity>
         <View className="flex flex-row justify-center items-center mt-3">
-          <Text>Don't have an account? </Text>
+          <Text className="font-[outfit]">Don't have an account? </Text>
           <TouchableOpacity onPress={handleSignUp}>
-            <Text className="text-secondary font-bold ">Signup</Text>
+            <Text className="text-secondary font-[outfit-bold] ">Signup</Text>
           </TouchableOpacity>
         </View>
-        <Text className="text-[13px] text-grey mt-[10px] text-center">
+        <Text className="text-[13px] text-grey mt-[10px] text-center font-[outfit] ">
           Start your journey to financial statbiltiy
         </Text>
       </View>

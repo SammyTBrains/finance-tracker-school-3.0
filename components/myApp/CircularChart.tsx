@@ -18,10 +18,11 @@ const CircularChart = () => {
 
   return (
     <View className="mt-5 bg-white p-5 rounded-2xl shadow-sm">
-      <Text className="text-xl">
-        Total Estimate: <Text className="font-bold">{formattedAmount}</Text>
+      <Text className="text-xl font-[outfit] ">
+        Total Estimate:{" "}
+        <Text className="font-[outfit-bold]">{formattedAmount}</Text>
       </Text>
-      <View className="mt-[10px] flex flex-row gap-10">
+      <View className="flex flex-row gap-10 -mt-6">
         <PieChart
           widthAndHeight={widthAndHeight}
           series={values}
@@ -35,7 +36,7 @@ const CircularChart = () => {
             size={24}
             color={"#e0e1e2"}
           />
-          <Text>NA</Text>
+          <Text className="font-[outfit]">NA</Text>
         </View>
       </View>
     </View>

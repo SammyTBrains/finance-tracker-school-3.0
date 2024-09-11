@@ -28,8 +28,10 @@ const Header = () => {
       />
       <View className="flex flex-row items-center justify-between w-[85%]">
         <View>
-          <Text className="text-white text-base">Welcome,</Text>
-          <Text className="text-white text-xl font-bold">{modifiedName}</Text>
+          <Text className="text-white text-base font-[outfit]">Welcome,</Text>
+          <Text className="text-white text-xl font-[outfit-bold] ">
+            {modifiedName}
+          </Text>
         </View>
         <Ionicons name="notifications" size={24} color={"white"} />
       </View>
