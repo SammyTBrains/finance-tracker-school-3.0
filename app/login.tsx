@@ -41,7 +41,7 @@ const LoginScreen = () => {
           className="bg-white p-5 px-[5px] rounded-full mt-[30px]"
           onPress={handleSignIn}
         >
-          <Text className="text-center text-primary">Login</Text>
+          <Text className="text-center text-primary font-bold">Login</Text>
         </TouchableOpacity>
         <View className="flex flex-row justify-center items-center mt-3">
           <Text>Don't have an account? </Text>
