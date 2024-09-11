@@ -1,12 +1,36 @@
 import colors from "@/components/myApp/colors";
 import ColorPicker from "@/components/myApp/ColorPicker";
 import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
+import { supabase } from "@/utils/supabase";
+import { client } from "@/utils/KindeConfig";
 
 const AddNewCategory = () => {
   const [selectedIcon, setSelectedIcon] = useState("IC");
   const [selectedColor, setSelectedColor] = useState(colors.primary);
+  const [categoryName, setCategoryName] = useState<string>();
+  const [totalBudget, setTotalBudget] = useState<string>();
+
+  const onCreateCategory = async () => {
+    const { email } = await client.getUserDetails();
+    const { data, error } = await supabase
+      .from("Category")
+      .insert([
+        {
+          icon: selectedIcon,
+          color: selectedColor,
+          name: categoryName,
+          assigned_budget: totalBudget,
+          created_by: email,
+        },
+      ])
+      .select();
+
+    if (data) {
+      Alert.alert("Category created successfully!");
+    }
+  };
 
   return (
     <View className="mt-5 p-5">
@@ -30,7 +54,8 @@ const AddNewCategory = () => {
         <TextInput
           placeholder="Category Name"
           placeholderTextColor={"grey"}
-          className="w-full text-base font-[outfit]"
+          onChangeText={(value) => setCategoryName(value)}
+          className="w-full text-[17px] font-[outfit]"
         />
       </View>
 
@@ -39,9 +64,21 @@ const AddNewCategory = () => {
         <TextInput
           placeholder="Total Budget"
           placeholderTextColor={"grey"}
-          className="w-full text-base font-[outfit]"
+          keyboardType="numeric"
+          onChangeText={(value) => setTotalBudget(value)}
+          className="w-full text-[17px] font-[outfit]"
         />
       </View>
+
+      <TouchableOpacity
+        className="bg-primary p-[15px] rounded-[10px] mt-[30px]"
+        disabled={!categoryName || !totalBudget}
+        onPress={() => onCreateCategory()}
+      >
+        <Text className="text-white font-[outfit-bold] text-center text-base">
+          Create
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
