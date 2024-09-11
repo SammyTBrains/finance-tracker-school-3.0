@@ -27,6 +27,14 @@ export default function RootLayout() {
     <>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen
+          name="add-new-category"
+          options={{
+            presentation: "modal",
+            headerShown: true,
+            headerTitle: "Add New Category",
+          }}
+        />
       </Stack>
       <CheckAuth />
     </>

@@ -1,9 +1,11 @@
 import CircularChart from "@/components/myApp/CircularChart";
+import colors from "@/components/myApp/colors";
 import Header from "@/components/myApp/Header";
 import { client } from "@/utils/KindeConfig";
 import services from "@/utils/services";
 import { supabase } from "@/utils/supabase";
-import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Link, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Button, Text, View } from "react-native";
 
@@ -34,10 +36,15 @@ export default function Home() {
   };
 
   return (
-    <View className="mt-5 p-5 bg-primary h-[150px]">
-      <Header />
-      <CircularChart />
-      <Button onPress={handleLogout} title="Logout" />
+    <View className="flex-1 mt-5">
+      <View className="p-5 bg-primary h-[150px]">
+        <Header />
+        <CircularChart />
+        <Button onPress={handleLogout} title="Logout" />
+      </View>
+      <Link href={"/add-new-category"} className="absolute bottom-4 right-4">
+        <Ionicons name="add-circle" size={64} color={colors.primary} />
+      </Link>
     </View>
   );
 }
