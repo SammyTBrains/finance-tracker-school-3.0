@@ -1,7 +1,14 @@
 import colors from "@/components/myApp/colors";
 import ColorPicker from "@/components/myApp/ColorPicker";
 import { useState } from "react";
-import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
 import { client } from "@/utils/KindeConfig";
@@ -11,8 +18,10 @@ const AddNewCategory = () => {
   const [selectedColor, setSelectedColor] = useState(colors.primary);
   const [categoryName, setCategoryName] = useState<string>();
   const [totalBudget, setTotalBudget] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onCreateCategory = async () => {
+    setIsLoading(true);
     const { email } = await client.getUserDetails();
     const { data, error } = await supabase
       .from("Category")
@@ -30,6 +39,7 @@ const AddNewCategory = () => {
     if (data) {
       Alert.alert("Category created successfully!");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -75,9 +85,15 @@ const AddNewCategory = () => {
         disabled={!categoryName || !totalBudget}
         onPress={() => onCreateCategory()}
       >
-        <Text className="text-white font-[outfit-bold] text-center text-base">
-          Create
-        </Text>
+        <View className="items-center justify-center">
+          {isLoading ? (
+            <ActivityIndicator color="white" size={"large"} />
+          ) : (
+            <Text className="text-white font-[outfit-bold] text-center text-base ">
+              Create
+            </Text>
+          )}
+        </View>
       </TouchableOpacity>
     </View>
   );
