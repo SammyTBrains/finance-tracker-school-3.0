@@ -1,3 +1,4 @@
+import CategoryList from "@/components/myApp/CategoryList";
 import CircularChart from "@/components/myApp/CircularChart";
 import colors from "@/components/myApp/colors";
 import Header from "@/components/myApp/Header";
@@ -6,11 +7,12 @@ import services from "@/utils/services";
 import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
-import { useEffect } from "react";
-import { Button, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Button, View } from "react-native";
 
 export default function Home() {
   const router = useRouter();
+  const [categoryList, setCategoryList] = useState<any[] | null>([]);
 
   useEffect(() => {
     getCategoryList();
@@ -29,10 +31,11 @@ export default function Home() {
     const { email } = await client.getUserDetails();
     let { data: Category, error } = await supabase
       .from("Category")
-      .select("*")
+      .select("*,CategoryItems(*)")
       .eq("created_by", email);
 
-    //  console.log("Data", Category);
+    //console.log("Data", Category);
+    setCategoryList(Category);
   };
 
   return (
@@ -40,7 +43,8 @@ export default function Home() {
       <View className="p-5 bg-primary h-[150px]">
         <Header />
         <CircularChart />
-        <Button onPress={handleLogout} title="Logout" />
+        <CategoryList categoryList={categoryList} />
+        {/* <Button onPress={handleLogout} title="Logout" /> */}
       </View>
       <Link href={"/add-new-category"} className="absolute bottom-4 right-4">
         <Ionicons name="add-circle" size={64} color={colors.primary} />
