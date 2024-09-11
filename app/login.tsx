@@ -1,8 +1,31 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { client } from "@/utils/KindeConfig";
+import services from "@/utils/services";
+import { useRouter } from "expo-router";
+import { Button, Image, Text, TouchableOpacity, View } from "react-native";
 
 const loginBg = require("./../assets/images/myApp/bgmobileapp3.jpg");
 
 const LoginScreen = () => {
+  const router = useRouter();
+
+  const handleSignUp = async () => {
+    const token = await client.register();
+    if (token) {
+      // User was authenticated
+      await services.storeData("login", "true");
+      router.replace("/");
+    }
+  };
+
+  const handleSignIn = async () => {
+    const token = await client.login();
+    if (token) {
+      // User was authenticated
+      await services.storeData("login", "true");
+      router.replace("/");
+    }
+  };
+
   return (
     <View className="flex items-center">
       <Image source={loginBg} className="h-[400px] w-full" />
@@ -14,9 +37,19 @@ const LoginScreen = () => {
           Stay on Track, Event by Event: The Best Way to Manage Your Finances
         </Text>
 
-        <TouchableOpacity className="bg-white p-5 px-[5px] rounded-full mt-[30px]">
+        <TouchableOpacity
+          className="bg-white p-5 px-[5px] rounded-full mt-[30px]"
+          onPress={handleSignIn}
+        >
           <Text className="text-center text-primary">Login/Signup</Text>
         </TouchableOpacity>
+        <View>
+          <Text>Don't have an account?</Text>
+          <Button onPress={handleSignUp} title="Signup" />
+        </View>
+        <Text className="text-[13px] text-grey mt-[10px] text-center">
+          Start your journey to financial statbiltiy
+        </Text>
       </View>
     </View>
   );

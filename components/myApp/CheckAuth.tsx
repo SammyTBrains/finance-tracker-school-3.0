@@ -13,6 +13,8 @@ const CheckAuth = () => {
     const result = await services.getData("login");
     if (result !== "true") {
       router.replace("/login");
+    } else {
+      router.replace("/");
     }
   };
   return null;
