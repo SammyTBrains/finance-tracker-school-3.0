@@ -4,7 +4,7 @@ import CourseItemList from "@/components/myApp/CourseDetails/CourseItemList";
 import { supabase } from "@/utils/supabase";
 import { CategoryData } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, TouchableOpacity, ActivityIndicator } from "react-native";
 
@@ -49,12 +49,22 @@ export default function CategoryDetails() {
   }
 
   return (
-    <View className="p-5 mt-5">
+    <View className="flex-1 p-5 mt-5">
       <TouchableOpacity onPress={() => router.back()}>
         <Ionicons name="arrow-back-circle" size={44} color={"black"} />
       </TouchableOpacity>
       <CourseInfo categoryData={categoryData} />
       <CourseItemList categoryData={categoryData} />
+
+      <Link
+        href={{
+          pathname: "/add-new-category-item",
+          params: { categoryId: categoryData.id },
+        }}
+        className="absolute bottom-4 right-4"
+      >
+        <Ionicons name="add-circle" size={60} color={colors.primary} />
+      </Link>
     </View>
   );
 }

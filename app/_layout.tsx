@@ -35,6 +35,14 @@ export default function RootLayout() {
             headerTitle: "Add New Category",
           }}
         />
+        <Stack.Screen
+          name="add-new-category-item"
+          options={{
+            presentation: "modal",
+            headerShown: true,
+            headerTitle: "Add New Category Item",
+          }}
+        />
       </Stack>
       <CheckAuth />
     </>
