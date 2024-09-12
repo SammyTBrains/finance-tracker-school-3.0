@@ -1,7 +1,8 @@
 import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CategoryData, CategoryItem } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
+import { formatAmount } from "@/utils/functions";
 
 type CourseInfoProps = {
   categoryData: CategoryData;
@@ -10,14 +11,6 @@ type CourseInfoProps = {
 export default function CourseInfo(props: CourseInfoProps) {
   const [totalCost, setTotalCost] = useState("");
   const [percentageTotal, setPercentageTotal] = useState(0);
-
-  const formatAmount = (amount: number) => {
-    return amount.toLocaleString("en-NG", {
-      style: "currency",
-      currency: "NGN", // Change to Nigerian Naira
-      minimumFractionDigits: 2, // Adjust for desired decimal places
-    });
-  };
 
   useEffect(() => {
     calculateTotalPercentage();
@@ -40,7 +33,7 @@ export default function CourseInfo(props: CourseInfoProps) {
       <View className="flex flex-row justify-between items-center mt-5">
         <View className="justify-center items-baseline">
           <Text
-            className="text-2xl font-[outfit-medium] p-5 overflow-hidden"
+            className="text-4xl font-[outfit-medium] p-5 overflow-hidden"
             style={{
               backgroundColor: props.categoryData.color,
               borderRadius: 15,
