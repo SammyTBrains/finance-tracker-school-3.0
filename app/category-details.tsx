@@ -11,7 +11,12 @@ import {
   useRouter,
 } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { View, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 
 export default function CategoryDetails() {
   const router = useRouter();
@@ -56,14 +61,16 @@ export default function CategoryDetails() {
 
   return (
     <View className="flex-1 p-5 mt-5 bg-white">
-      <TouchableOpacity onPress={() => router.back()}>
-        <Ionicons name="arrow-back-circle" size={44} color={"black"} />
-      </TouchableOpacity>
-      <CourseInfo categoryData={categoryData} />
-      <CourseItemList
-        categoryData={categoryData}
-        setUpdateRecord={() => getCategoryDetail()}
-      />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <TouchableOpacity onPress={() => router.replace("/")}>
+          <Ionicons name="arrow-back-circle" size={44} color={"black"} />
+        </TouchableOpacity>
+        <CourseInfo categoryData={categoryData} />
+        <CourseItemList
+          categoryData={categoryData}
+          setUpdateRecord={() => getCategoryDetail()}
+        />
+      </ScrollView>
 
       <Link
         href={{

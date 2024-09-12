@@ -9,7 +9,13 @@ import { CategoryData } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, RefreshControl, ScrollView, View } from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  RefreshControl,
+  ScrollView,
+  View,
+} from "react-native";
 
 export default function Home() {
   const router = useRouter();
@@ -41,6 +47,14 @@ export default function Home() {
     setCategoryList(Category as CategoryData[]);
     setLoading(false);
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size={"large"} color={colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 mt-5">
