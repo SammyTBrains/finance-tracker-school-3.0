@@ -5,21 +5,45 @@ type CategoryListProps = {
 };
 
 export default function CategoryList(props: CategoryListProps) {
+  const amount = 5000;
+
+  const formattedAmount = amount.toLocaleString("en-NG", {
+    style: "currency",
+    currency: "NGN", // Change to Nigerian Naira
+    minimumFractionDigits: 2, // Adjust for desired decimal places
+  });
+
   return (
     <View className="mt-5">
-      <Text className="font-[outfit-bold] text-xl">Latest Budget</Text>
+      <Text className="font-[outfit-bold] text-[25px] mb-4">Latest Budget</Text>
       <View>
         {props.categoryList?.map((category, index) => (
-          <View key={index}>
+          <View
+            key={index}
+            className="flex flex-row gap-[10px] items-center bg-white p-[10px] rounded-[15px] shadow-sm mb-4"
+          >
             <View className="justify-center items-baseline">
               <Text
-                className="text-[25px] p-[15px] font-[outfit-medium] overflow-hidden"
+                className="text-[35px] p-[16px] font-[outfit-medium] overflow-hidden"
                 style={{
                   borderRadius: 16,
                   backgroundColor: category.color,
                 }}
               >
                 {category.icon}
+              </Text>
+            </View>
+            <View className="flex flex-row items-center justify-between w-[70%]">
+              <View>
+                <Text className="font-[outfit-bold] text-xl ">
+                  {category.name}
+                </Text>
+                <Text className="font-[outfit]">
+                  {category?.CategoryItems?.length} Items
+                </Text>
+              </View>
+              <Text className="font-[outfit-bold] text-[17px]">
+                {formattedAmount}
               </Text>
             </View>
           </View>
