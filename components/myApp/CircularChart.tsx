@@ -31,11 +31,6 @@ const CircularChart = (props: CircularChartProps) => {
           itemTotalCost = itemTotalCost + item_2.cost;
           totalEstimates = totalEstimates + item_2.cost;
         });
-        // setSliceColor((sliceColor) => [
-        //   ...sliceColor,
-        //   colors.COLOR_LIST[index],
-        // ]);
-        // setValues((values) => [...values, itemTotalCost]);
         sliceColorArray.push(colors.COLOR_LIST[index]);
         valuesArray.push(itemTotalCost);
       } else {

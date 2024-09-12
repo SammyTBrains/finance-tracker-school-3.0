@@ -2,14 +2,15 @@ import { formatAmount } from "@/utils/functions";
 import { CategoryData, CategoryItem } from "@/utils/types";
 import { EvilIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Touchable } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type CourseItemListProps = {
   categoryData: CategoryData;
 };
 
 export default function CourseItemList(props: CourseItemListProps) {
-  const [expandItem, setExpandItem] = useState(0);
+  const [expandItem, setExpandItem] = useState<number>();
   return (
     <View className="mt-5">
       <Text className="font-[outfit-bold] text-xl">Item List</Text>
@@ -17,7 +18,11 @@ export default function CourseItemList(props: CourseItemListProps) {
       <View className="mt-4">
         {props.categoryData.CategoryItems?.length > 0 ? (
           props.categoryData.CategoryItems.map((item: CategoryItem, index) => (
-            <View key={index} className="mt-3">
+            <TouchableOpacity
+              key={index}
+              onPress={() => setExpandItem(index)}
+              className="mt-3"
+            >
               <View className="flex flex-row justify-between items-center">
                 <Image
                   source={{ uri: item.image }}
@@ -44,14 +49,18 @@ export default function CourseItemList(props: CourseItemListProps) {
               </View>
               {expandItem === index && (
                 <View className="flex flex-row gap-3 justify-end">
-                  <EvilIcons name="trash" size={34} color="black" />
-                  <EvilIcons name="external-link" size={34} color="black" />
+                  <TouchableOpacity>
+                    <EvilIcons name="trash" size={34} color="red" />
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <EvilIcons name="external-link" size={34} color="blue" />
+                  </TouchableOpacity>
                 </View>
               )}
               {props.categoryData.CategoryItems.length - 1 != index && (
                 <View className="border-[.5px] mt-3 border-grey"></View>
               )}
-            </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text className="font-[outfit-bold] text-2xl text-grey">

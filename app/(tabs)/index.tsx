@@ -35,7 +35,8 @@ export default function Home() {
     let { data: Category, error } = await supabase
       .from("Category")
       .select("*,CategoryItems(*)")
-      .eq("created_by", email);
+      .eq("created_by", email)
+      .order("created_at", { ascending: false });
 
     setCategoryList(Category as CategoryData[]);
     setLoading(false);
