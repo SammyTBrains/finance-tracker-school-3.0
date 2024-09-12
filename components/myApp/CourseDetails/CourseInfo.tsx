@@ -56,7 +56,12 @@ export default function CourseInfo(props: CourseInfoProps) {
       <View className="flex flex-row justify-between mt-4">
         <Text className="font-[outfit-bold]">{totalCost}</Text>
         <Text className="font-[outfit]">
-          Total Budget:{props.categoryData.assigned_budget}
+          {"Total Budget: "}
+          {props.categoryData.assigned_budget.toLocaleString("en-NG", {
+            style: "currency",
+            currency: "NGN", // Change to Nigerian Naira
+            minimumFractionDigits: 2, // Adjust for desired decimal places
+          })}
         </Text>
       </View>
       <View className="w-full h-[15px] bg-grey rounded-full mt-2">

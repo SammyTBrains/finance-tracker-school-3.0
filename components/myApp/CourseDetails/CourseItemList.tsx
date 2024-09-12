@@ -14,7 +14,7 @@ export default function CourseItemList(props: CourseItemListProps) {
       <View className="mt-4">
         {props.categoryData.CategoryItems?.length > 0 ? (
           props.categoryData.CategoryItems.map((item: CategoryItem, index) => (
-            <View key={index}>
+            <View key={index} className="mt-3">
               <View className="flex flex-row justify-between items-center">
                 <Image
                   source={{ uri: item.image }}

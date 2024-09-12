@@ -49,7 +49,7 @@ export default function CategoryDetails() {
   }
 
   return (
-    <View className="flex-1 p-5 mt-5">
+    <View className="flex-1 p-5 mt-5 bg-white">
       <TouchableOpacity onPress={() => router.back()}>
         <Ionicons name="arrow-back-circle" size={44} color={"black"} />
       </TouchableOpacity>
