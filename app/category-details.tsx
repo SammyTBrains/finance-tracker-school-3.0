@@ -60,7 +60,10 @@ export default function CategoryDetails() {
         <Ionicons name="arrow-back-circle" size={44} color={"black"} />
       </TouchableOpacity>
       <CourseInfo categoryData={categoryData} />
-      <CourseItemList categoryData={categoryData} />
+      <CourseItemList
+        categoryData={categoryData}
+        setUpdateRecord={() => getCategoryDetail()}
+      />
 
       <Link
         href={{

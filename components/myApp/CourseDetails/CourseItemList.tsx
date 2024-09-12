@@ -1,16 +1,33 @@
 import { formatAmount } from "@/utils/functions";
+import { supabase } from "@/utils/supabase";
 import { CategoryData, CategoryItem } from "@/utils/types";
 import { EvilIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { View, Text, Image, Touchable } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
 
 type CourseItemListProps = {
   categoryData: CategoryData;
+  setUpdateRecord: () => void;
 };
 
 export default function CourseItemList(props: CourseItemListProps) {
   const [expandItem, setExpandItem] = useState<number>();
+
+  const onDeleteItem = async (id: number) => {
+    const { error } = await supabase
+      .from("CategoryItems")
+      .delete()
+      .eq("id", id);
+
+    props.setUpdateRecord();
+  };
+
+  const openUrl = (url: string) => {
+    if (url) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
     <View className="mt-5">
       <Text className="font-[outfit-bold] text-xl">Item List</Text>
@@ -20,7 +37,15 @@ export default function CourseItemList(props: CourseItemListProps) {
           props.categoryData.CategoryItems.map((item: CategoryItem, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => setExpandItem(index)}
+              onPress={() =>
+                setExpandItem((indexPrev) => {
+                  if (indexPrev === index) {
+                    return undefined;
+                  } else {
+                    return index;
+                  }
+                })
+              }
               className="mt-3"
             >
               <View className="flex flex-row justify-between items-center">
@@ -49,10 +74,10 @@ export default function CourseItemList(props: CourseItemListProps) {
               </View>
               {expandItem === index && (
                 <View className="flex flex-row gap-3 justify-end">
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => onDeleteItem(item.id)}>
                     <EvilIcons name="trash" size={34} color="red" />
                   </TouchableOpacity>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => openUrl(item.url)}>
                     <EvilIcons name="external-link" size={34} color="blue" />
                   </TouchableOpacity>
                 </View>
