@@ -1,3 +1,4 @@
+import { CategoryItem } from "@/utils/types";
 import { useRouter } from "expo-router";
 import { View, Text, TouchableOpacity } from "react-native";
 
@@ -15,13 +16,28 @@ export default function CategoryList(props: CategoryListProps) {
     });
   };
 
-  const amount = 5000;
+  // const amount = 5000;
 
-  const formattedAmount = amount.toLocaleString("en-NG", {
-    style: "currency",
-    currency: "NGN", // Change to Nigerian Naira
-    minimumFractionDigits: 2, // Adjust for desired decimal places
-  });
+  // const formattedAmount = amount.toLocaleString("en-NG", {
+  //   style: "currency",
+  //   currency: "NGN", // Change to Nigerian Naira
+  //   minimumFractionDigits: 2, // Adjust for desired decimal places
+  // });
+
+  const calculateTotalCost = (categoryItems: CategoryItem[]) => {
+    let totalCost = 0;
+    categoryItems.forEach((item) => {
+      totalCost = totalCost + item.cost;
+    });
+
+    const formattedTotalCost = totalCost.toLocaleString("en-NG", {
+      style: "currency",
+      currency: "NGN", // Change to Nigerian Naira
+      minimumFractionDigits: 2, // Adjust for desired decimal places
+    });
+
+    return formattedTotalCost;
+  };
 
   return (
     <View className="mt-5">
@@ -54,7 +70,7 @@ export default function CategoryList(props: CategoryListProps) {
                 </Text>
               </View>
               <Text className="font-[outfit-bold] text-[17px]">
-                {formattedAmount}
+                {calculateTotalCost(category?.CategoryItems)}
               </Text>
             </View>
           </TouchableOpacity>
