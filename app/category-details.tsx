@@ -4,8 +4,13 @@ import CourseItemList from "@/components/myApp/CourseDetails/CourseItemList";
 import { supabase } from "@/utils/supabase";
 import { CategoryData } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import {
+  Link,
+  useFocusEffect,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { View, TouchableOpacity, ActivityIndicator } from "react-native";
 
 export default function CategoryDetails() {
@@ -25,10 +30,11 @@ export default function CategoryDetails() {
     name: "",
   });
 
-  useEffect(() => {
-    // console.log(categoryId);
-    categoryId && getCategoryDetail();
-  }, [categoryId]);
+  useFocusEffect(
+    useCallback(() => {
+      categoryId && getCategoryDetail();
+    }, [categoryId])
+  );
 
   const getCategoryDetail = async () => {
     setLoading(true);

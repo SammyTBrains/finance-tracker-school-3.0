@@ -79,10 +79,7 @@ export default function AddNewCatrgoryItem() {
         .select();
 
       setIsLoading(false);
-      router.replace({
-        pathname: "/category-details",
-        params: { categoryId: categoryId },
-      });
+      router.back();
     }
   };
 
@@ -145,7 +142,7 @@ export default function AddNewCatrgoryItem() {
             />
           </View>
           <TouchableOpacity
-            disabled={!name || !cost}
+            disabled={!name || !cost || isLoading}
             className="bg-primary p-4 rounded-full mt-6"
             onPress={() => onClickAdd()}
           >

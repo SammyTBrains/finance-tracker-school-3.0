@@ -1,14 +1,18 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import { CategoryData, CategoryItem } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
 import { formatAmount } from "@/utils/functions";
+import { supabase } from "@/utils/supabase";
+import { useRouter } from "expo-router";
 
 type CourseInfoProps = {
   categoryData: CategoryData;
 };
 
 export default function CourseInfo(props: CourseInfoProps) {
+  const router = useRouter();
+
   const [totalCost, setTotalCost] = useState("");
   const [percentageTotal, setPercentageTotal] = useState(0);
 
@@ -24,8 +28,41 @@ export default function CourseInfo(props: CourseInfoProps) {
 
     const formattedTotal = formatAmount(total);
     setTotalCost(formattedTotal);
-    const percentageTotal = (total / props.categoryData.assigned_budget) * 100;
+    let percentageTotal = (total / props.categoryData.assigned_budget) * 100;
+    if (percentageTotal > 100) {
+      percentageTotal = 100;
+    }
     setPercentageTotal(percentageTotal);
+  };
+
+  const onDeleteCategory = async () => {
+    Alert.alert(
+      "Are you sure you want to delete this category?",
+      "This is an irreversible action!",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: async () => {
+            const { error } = await supabase
+              .from("CategoryItems")
+              .delete()
+              .eq("category_id", props.categoryData.id);
+
+            await supabase
+              .from("Category")
+              .delete()
+              .eq("id", props.categoryData.id);
+
+            router.replace("/(tabs)");
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -50,7 +87,9 @@ export default function CourseInfo(props: CourseInfoProps) {
             {props.categoryData?.CategoryItems.length} Items
           </Text>
         </View>
-        <Ionicons name="trash" size={24} color="red" />
+        <TouchableOpacity onPress={() => onDeleteCategory()}>
+          <Ionicons name="trash" size={24} color="red" />
+        </TouchableOpacity>
       </View>
       {/* Progress Bar */}
       <View className="flex flex-row justify-between mt-4">

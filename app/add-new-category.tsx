@@ -89,7 +89,7 @@ const AddNewCategory = () => {
 
       <TouchableOpacity
         className="bg-primary p-[15px] rounded-[10px] mt-[30px]"
-        disabled={!categoryName || !totalBudget}
+        disabled={!categoryName || !totalBudget || isLoading}
         onPress={() => onCreateCategory()}
       >
         <View className="items-center justify-center">
