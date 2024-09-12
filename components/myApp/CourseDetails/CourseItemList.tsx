@@ -1,5 +1,7 @@
 import { formatAmount } from "@/utils/functions";
 import { CategoryData, CategoryItem } from "@/utils/types";
+import { EvilIcons } from "@expo/vector-icons";
+import { useState } from "react";
 import { View, Text, Image } from "react-native";
 
 type CourseItemListProps = {
@@ -7,6 +9,7 @@ type CourseItemListProps = {
 };
 
 export default function CourseItemList(props: CourseItemListProps) {
+  const [expandItem, setExpandItem] = useState(0);
   return (
     <View className="mt-5">
       <Text className="font-[outfit-bold] text-xl">Item List</Text>
@@ -24,7 +27,10 @@ export default function CourseItemList(props: CourseItemListProps) {
                   <Text className="text-xl font-[outfit-bold]">
                     {item.name}
                   </Text>
-                  <Text className="font-[outfit] text-greyDarker">
+                  <Text
+                    className="font-[outfit] text-greyDarker"
+                    numberOfLines={2}
+                  >
                     {item.url}
                   </Text>
                 </View>
@@ -36,6 +42,12 @@ export default function CourseItemList(props: CourseItemListProps) {
                   })}
                 </Text>
               </View>
+              {expandItem === index && (
+                <View className="flex flex-row gap-3 justify-end">
+                  <EvilIcons name="trash" size={34} color="black" />
+                  <EvilIcons name="external-link" size={34} color="black" />
+                </View>
+              )}
               {props.categoryData.CategoryItems.length - 1 != index && (
                 <View className="border-[.5px] mt-3 border-grey"></View>
               )}

@@ -15,22 +15,14 @@ const CircularChart = (props: CircularChartProps) => {
   const [sliceColor, setSliceColor] = useState(["#e0e1e2"]);
   const [calculatedTotalCost, setCalculatedTotalCost] = useState("");
 
-  const amount = 0;
-
-  const formattedAmount = amount.toLocaleString("en-NG", {
-    style: "currency",
-    currency: "NGN", // Change to Nigerian Naira
-    minimumFractionDigits: 2, // Adjust for desired decimal places
-  });
-
   useEffect(() => {
-    updateCircularChart();
-  }, []);
+    props.categoryList && updateCircularChart();
+  }, [props.categoryList]);
 
   const updateCircularChart = () => {
     let totalEstimates = 0;
-    setSliceColor([]);
-    setValues([]);
+    let sliceColorArray = [];
+    let valuesArray = [];
     let otherCost = 0;
     props.categoryList.forEach((item, index) => {
       if (index < 4) {
@@ -39,11 +31,13 @@ const CircularChart = (props: CircularChartProps) => {
           itemTotalCost = itemTotalCost + item_2.cost;
           totalEstimates = totalEstimates + item_2.cost;
         });
-        setSliceColor((sliceColor) => [
-          ...sliceColor,
-          colors.COLOR_LIST[index],
-        ]);
-        setValues((values) => [...values, itemTotalCost]);
+        // setSliceColor((sliceColor) => [
+        //   ...sliceColor,
+        //   colors.COLOR_LIST[index],
+        // ]);
+        // setValues((values) => [...values, itemTotalCost]);
+        sliceColorArray.push(colors.COLOR_LIST[index]);
+        valuesArray.push(itemTotalCost);
       } else {
         item.CategoryItems.forEach((item_2) => {
           otherCost = otherCost + item_2.cost;
@@ -51,6 +45,7 @@ const CircularChart = (props: CircularChartProps) => {
         });
       }
     });
+
     setCalculatedTotalCost(
       totalEstimates.toLocaleString("en-NG", {
         style: "currency",
@@ -58,8 +53,15 @@ const CircularChart = (props: CircularChartProps) => {
         minimumFractionDigits: 2, // Adjust for desired decimal places
       })
     );
-    setSliceColor((sliceColor) => [...sliceColor, colors.COLOR_LIST[4]]);
-    setValues((values) => [...values, otherCost]);
+
+    sliceColorArray.push(colors.COLOR_LIST[4]);
+    valuesArray.push(otherCost);
+    setSliceColor(sliceColorArray);
+    setValues(valuesArray);
+    // Add a check to ensure that the series prop is not an array of values that sum up to zero
+    if (valuesArray.reduce((a, b) => a + b, 0) === 0) {
+      setValues([1]); // or some other default value
+    }
   };
 
   return (
