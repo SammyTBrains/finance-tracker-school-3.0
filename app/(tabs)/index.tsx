@@ -8,11 +8,12 @@ import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, View } from "react-native";
+import { Button, RefreshControl, ScrollView, View } from "react-native";
 
 export default function Home() {
   const router = useRouter();
   const [categoryList, setCategoryList] = useState<any[] | null>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getCategoryList();
@@ -28,6 +29,7 @@ export default function Home() {
   };
 
   const getCategoryList = async () => {
+    setLoading(true);
     const { email } = await client.getUserDetails();
     let { data: Category, error } = await supabase
       .from("Category")
@@ -36,16 +38,28 @@ export default function Home() {
 
     //console.log("Data", Category);
     setCategoryList(Category);
+    setLoading(false);
   };
 
   return (
     <View className="flex-1 mt-5">
-      <View className="p-5 bg-primary h-[150px]">
-        <Header />
-        <CircularChart />
-        <CategoryList categoryList={categoryList} />
-        {/* <Button onPress={handleLogout} title="Logout" /> */}
-      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => getCategoryList()}
+            refreshing={loading}
+          />
+        }
+      >
+        <View className="p-5 bg-primary h-[150px]">
+          <Header />
+        </View>
+        <View className="p-5 -mt-20">
+          <CircularChart />
+          <CategoryList categoryList={categoryList} />
+          {/* <Button onPress={handleLogout} title="Logout" /> */}
+        </View>
+      </ScrollView>
       <Link href={"/add-new-category"} className="absolute bottom-4 right-4">
         <Ionicons name="add-circle" size={64} color={colors.primary} />
       </Link>

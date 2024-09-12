@@ -1,10 +1,20 @@
-import { View, Text } from "react-native";
+import { useRouter } from "expo-router";
+import { View, Text, TouchableOpacity } from "react-native";
 
 type CategoryListProps = {
   categoryList: any[] | null;
 };
 
 export default function CategoryList(props: CategoryListProps) {
+  const router = useRouter();
+
+  const onCategoryClick = (category: any) => {
+    router.push({
+      pathname: "/category-details",
+      params: { categoryId: category.id },
+    });
+  };
+
   const amount = 5000;
 
   const formattedAmount = amount.toLocaleString("en-NG", {
@@ -18,8 +28,9 @@ export default function CategoryList(props: CategoryListProps) {
       <Text className="font-[outfit-bold] text-[25px] mb-4">Latest Budget</Text>
       <View>
         {props.categoryList?.map((category, index) => (
-          <View
+          <TouchableOpacity
             key={index}
+            onPress={() => onCategoryClick(category)}
             className="flex flex-row gap-[10px] items-center bg-white p-[10px] rounded-[15px] shadow-sm mb-4"
           >
             <View className="justify-center items-baseline">
@@ -46,7 +57,7 @@ export default function CategoryList(props: CategoryListProps) {
                 {formattedAmount}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
