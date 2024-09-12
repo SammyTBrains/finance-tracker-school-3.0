@@ -5,6 +5,7 @@ import Header from "@/components/myApp/Header";
 import { client } from "@/utils/KindeConfig";
 import services from "@/utils/services";
 import { supabase } from "@/utils/supabase";
+import { CategoryData } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -12,7 +13,7 @@ import { Button, RefreshControl, ScrollView, View } from "react-native";
 
 export default function Home() {
   const router = useRouter();
-  const [categoryList, setCategoryList] = useState<any[] | null>([]);
+  const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -36,8 +37,7 @@ export default function Home() {
       .select("*,CategoryItems(*)")
       .eq("created_by", email);
 
-    //console.log("Data", Category);
-    setCategoryList(Category);
+    setCategoryList(Category as CategoryData[]);
     setLoading(false);
   };
 
@@ -55,7 +55,7 @@ export default function Home() {
           <Header />
         </View>
         <View className="p-5 -mt-20">
-          <CircularChart />
+          <CircularChart categoryList={categoryList} />
           <CategoryList categoryList={categoryList} />
           {/* <Button onPress={handleLogout} title="Logout" /> */}
         </View>

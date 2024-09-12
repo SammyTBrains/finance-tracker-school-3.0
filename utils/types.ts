@@ -1,5 +1,5 @@
 export type CategoryData = {
-  CategoryItems: [];
+  CategoryItems: CategoryItem[];
   assigned_budget: number;
   color: string;
   created_at: string;
