@@ -12,8 +12,11 @@ import {
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
 import { client } from "@/utils/KindeConfig";
+import { useRouter } from "expo-router";
 
 const AddNewCategory = () => {
+  const router = useRouter();
+
   const [selectedIcon, setSelectedIcon] = useState("IC");
   const [selectedColor, setSelectedColor] = useState(colors.primary);
   const [categoryName, setCategoryName] = useState<string>();
@@ -37,7 +40,11 @@ const AddNewCategory = () => {
       .select();
 
     if (data) {
-      Alert.alert("Category created successfully!");
+      router.replace({
+        pathname: "/category-details",
+        params: { categoryId: data[0].id },
+      });
+      // Alert.alert("Category created successfully!");
     }
     setIsLoading(false);
   };

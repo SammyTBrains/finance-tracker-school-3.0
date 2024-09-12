@@ -6,7 +6,7 @@ export default function CategoryDetails() {
   const { categoryId } = useLocalSearchParams();
 
   useEffect(() => {
-    console.log(categoryId);
+    // console.log(categoryId);
   }, [categoryId]);
 
   return (
