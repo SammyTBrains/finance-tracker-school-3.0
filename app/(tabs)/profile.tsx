@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -11,7 +11,7 @@ import { supabase } from "@/utils/supabase";
 import { client } from "@/utils/KindeConfig";
 import { UserProfile } from "@kinde-oss/react-native-sdk-0-7x";
 import services from "@/utils/services";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import colors from "@/components/myApp/colors";
 import { CategoryData, CategoryItem } from "@/utils/types";
 
@@ -21,9 +21,15 @@ const Profile = () => {
   const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
   const [totalCategoryItems, setTotalCategoryItems] = useState(0);
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getData();
+    }, [])
+  );
 
   const firstNameModified = `${user?.given_name
     .charAt(0)
