@@ -62,7 +62,7 @@ export default function CategoryList(props: CategoryListProps) {
             </View>
             <View className="flex flex-row items-center justify-between w-[70%]">
               <View>
-                <Text className="font-[outfit-bold] text-xl ">
+                <Text className="font-[outfit-bold] text-xl">
                   {category.name}
                 </Text>
                 <Text className="font-[outfit]">

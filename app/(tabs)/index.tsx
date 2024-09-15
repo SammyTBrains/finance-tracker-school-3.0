@@ -18,22 +18,12 @@ import {
 } from "react-native";
 
 export default function Home() {
-  const router = useRouter();
   const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getCategoryList();
   }, []);
-
-  const handleLogout = async () => {
-    const loggedOut = await client.logout();
-    if (loggedOut) {
-      // User was logged out
-      await services.storeData("login", "false");
-      router.replace("/login");
-    }
-  };
 
   const getCategoryList = async () => {
     setLoading(true);
@@ -72,7 +62,6 @@ export default function Home() {
         <View className="p-5 -mt-20">
           <CircularChart categoryList={categoryList} />
           <CategoryList categoryList={categoryList} />
-          {/* <Button onPress={handleLogout} title="Logout" /> */}
         </View>
       </ScrollView>
       <Link href={"/add-new-category"} className="absolute bottom-4 right-4">

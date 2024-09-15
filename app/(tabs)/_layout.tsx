@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "@/components/myApp/colors";
 
 export default function TabsLayout() {
@@ -21,11 +21,15 @@ export default function TabsLayout() {
           }}
         />
         <Tabs.Screen
-          name="history"
+          name="ai-assistance"
           options={{
-            title: "History",
+            title: "AI Assistance",
             tabBarIcon: ({ color, focused }) => (
-              <FontAwesome name="history" color={color} size={28} />
+              <MaterialCommunityIcons
+                name="robot-happy"
+                size={28}
+                color={color}
+              />
             ),
           }}
         />
