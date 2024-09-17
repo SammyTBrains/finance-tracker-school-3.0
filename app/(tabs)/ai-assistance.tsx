@@ -18,7 +18,6 @@ import colors from "@/components/myApp/colors";
 import { GOOGLE_API_KEY, OPENAI_API_KEY } from "@/env";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { supabase } from "@/utils/supabase";
-import undici from "undici";
 
 const AIAssistance = () => {
   const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
