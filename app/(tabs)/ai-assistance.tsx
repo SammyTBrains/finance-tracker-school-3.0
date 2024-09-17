@@ -53,7 +53,7 @@ const AIAssistance = () => {
       });
 
       const result = await chat.sendMessage(
-        userMessage + " Don't show your response in JSON or object format"
+        userMessage + " \n Don't show your response in JSON or object format"
       );
       const response = result.response.text();
       console.log(response);
