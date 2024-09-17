@@ -15,31 +15,48 @@ import axios from "axios";
 import { client } from "@/utils/KindeConfig";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "@/components/myApp/colors";
-import { OPENAI_API_KEY } from "@/env";
+import { GOOGLE_API_KEY, OPENAI_API_KEY } from "@/env";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { supabase } from "@/utils/supabase";
+import undici from "undici";
 
 const AIAssistance = () => {
+  const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
+
   const [isLoading, setIsLoading] = useState(false);
   const [userMessage, setUserMessage] = useState("");
+  const [aiResponse, setAIResponse] = useState("");
 
   const handleUserMessage = async () => {
     setIsLoading(true);
-
     try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "davinci-002",
-          prompt: userMessage,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-          },
-        }
-      );
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-      console.log(response.data);
+      const { email } = await client.getUserDetails();
+      let { data: Category, error } = await supabase
+        .from("Category")
+        .select("*,CategoryItems(*)")
+        .eq("created_by", email)
+        .order("created_at", { ascending: false });
+
+      const chat = model.startChat({
+        history: Category?.map((item) => ({
+          role: "user",
+          parts: [
+            {
+              text: JSON.stringify(item),
+            },
+          ],
+        })),
+        generationConfig: {
+          maxOutputTokens: 500,
+        },
+      });
+
+      const result = await chat.sendMessage(userMessage);
+      const response = result.response.text();
+      console.log(response);
+      setAIResponse(response);
     } catch (error) {
       console.error(error);
     } finally {
@@ -79,10 +96,7 @@ const AIAssistance = () => {
             </View>
             <TouchableOpacity
               className="bg-primary p-[15px] rounded-[10px]"
-              onPress={() => {
-                setIsLoading(true);
-                setTimeout(handleUserMessage, 1000); // 1 second delay
-              }}
+              onPress={handleUserMessage}
             >
               <View className="items-center justify-center">
                 {isLoading ? (
