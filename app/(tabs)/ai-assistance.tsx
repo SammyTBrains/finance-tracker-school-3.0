@@ -53,7 +53,9 @@ const AIAssistance = () => {
         },
       });
 
-      const result = await chat.sendMessage(userMessage);
+      const result = await chat.sendMessage(
+        userMessage + " Don't show your response in JSON or object format"
+      );
       const response = result.response.text();
       console.log(response);
       setAIResponse(response);
@@ -79,7 +81,7 @@ const AIAssistance = () => {
             }}
           >
             <View>
-              <Text>Results to be shown here</Text>
+              <Text>{aiResponse}</Text>
             </View>
           </ScrollView>
           <View className="p-3 border flex flex-row items-center rounded-xl border-greyDarker">
