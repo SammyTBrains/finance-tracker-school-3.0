@@ -72,7 +72,6 @@ const AIAssistance = () => {
         userMessage + " \n Don't show your response in JSON or object format"
       );
       const response = result.response.text();
-      console.log(response);
       const message = {
         _id: Math.random().toString(36).substring(7),
         text: response,
