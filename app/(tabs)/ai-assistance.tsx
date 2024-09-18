@@ -64,7 +64,7 @@ const AIAssistance = () => {
           ],
         })),
         generationConfig: {
-          maxOutputTokens: 500,
+          maxOutputTokens: 300,
         },
       });
 
@@ -73,12 +73,11 @@ const AIAssistance = () => {
       );
       const response = result.response.text();
       console.log(response);
-      setAIResponse(response);
       const message = {
         _id: Math.random().toString(36).substring(7),
         text: response,
         createdAt: new Date(),
-        user: { _id: 2 },
+        user: { _id: 2, name: "AI Assistant" },
       };
       setMessages((prevMessages) => GiftedChat.append(prevMessages, [message]));
     } catch (error) {
@@ -100,6 +99,7 @@ const AIAssistance = () => {
               messages={messages}
               renderInputToolbar={() => null}
               user={{ _id: 1 }}
+              minInputToolbarHeight={0}
             />
           </View>
           <View className="p-3 border flex flex-row items-center rounded-xl border-greyDarker">
