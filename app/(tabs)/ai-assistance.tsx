@@ -74,6 +74,13 @@ const AIAssistance = () => {
       const response = result.response.text();
       console.log(response);
       setAIResponse(response);
+      const message = {
+        _id: Math.random().toString(36).substring(7),
+        text: response,
+        createdAt: new Date(),
+        user: { _id: 2 },
+      };
+      setMessages((prevMessages) => GiftedChat.append(prevMessages, [message]));
     } catch (error) {
       console.error(error);
     } finally {
@@ -87,7 +94,7 @@ const AIAssistance = () => {
       className="flex-1"
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1 justify-center p-5 bg-white">
+        <View className="flex-1 p-5 bg-white">
           <View className="flex-1 justify-center">
             <GiftedChat
               messages={messages}
