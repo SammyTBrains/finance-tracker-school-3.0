@@ -94,6 +94,7 @@ const AIAssistance = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className="flex-1 p-5 bg-white">
           <View className="flex-1 justify-center">
+            <Text></Text>
             <GiftedChat
               messages={messages}
               renderInputToolbar={() => null}
