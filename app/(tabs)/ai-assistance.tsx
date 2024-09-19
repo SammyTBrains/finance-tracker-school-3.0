@@ -87,10 +87,7 @@ const AIAssistance = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
-    >
+    <KeyboardAvoidingView behavior="padding" className="flex-1">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View className="flex-1 p-5 bg-white">
           <View className="flex-1 justify-center">

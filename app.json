@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "finance-tracker-school-3.0",
-    "slug": "finance-tracker-school-3.0",
+    "slug": "the-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sammyj.finance_tracker"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "91d55f60-2bd4-428c-96b4-b4a70a98d324"
+      }
     }
   }
 }
