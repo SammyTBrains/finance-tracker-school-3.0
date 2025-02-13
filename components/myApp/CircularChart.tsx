@@ -49,9 +49,7 @@ const CircularChart = (props: CircularChartProps) => {
       })
     );
 
-    if (props.categoryList.length > 4) {
-      sliceColorArray.push(colors.COLOR_LIST[4]);
-    }
+    sliceColorArray.push(colors.COLOR_LIST[4]);
     valuesArray.push(otherCost);
     setSliceColor(sliceColorArray);
     setValues(valuesArray);
