@@ -54,15 +54,23 @@ export default function AddNewCatrgoryItem() {
   const onClickAdd = async () => {
     setIsLoading(true);
     const uniqueFileName = Date.now();
+
+    // Upload image to storage
     const { data, error } = await supabase.storage
       .from("images")
       .upload(uniqueFileName + ".png", decode(image), {
         contentType: "image/png",
       });
 
+    if (error) {
+      console.log("THE ERROR", error);
+    } else {
+      console.log("Upload successful:", data);
+    }
+
     if (data) {
       const fileURL =
-        "https://fwarxrodmopupvdhcino.supabase.co/storage/v1/object/public/images/" +
+        "https://lxmtsutndsakztpwpmxn.supabase.co/storage/v1/object/public/images/" +
         uniqueFileName +
         ".png";
 
