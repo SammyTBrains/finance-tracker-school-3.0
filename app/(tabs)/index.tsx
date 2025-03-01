@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   return (
-    <View className="flex-1 mt-5">
+    <View className="flex-1 mt-5 bg-[#e0e3f9]">
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -56,7 +56,7 @@ export default function Home() {
           />
         }
       >
-        <View className="p-5 bg-primary h-[150px]">
+        <View className="p-5 bg-[#2032f4] h-[150px]">
           <Header />
         </View>
         <View className="p-5 -mt-20">

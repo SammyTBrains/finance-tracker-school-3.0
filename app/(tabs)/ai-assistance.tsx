@@ -15,7 +15,7 @@ import axios from "axios";
 import { client } from "@/utils/KindeConfig";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "@/components/myApp/colors";
-import { GOOGLE_API_KEY, OPENAI_API_KEY } from "@/env";
+import { GOOGLE_API_KEY, OPENAI_API_KEY } from "../../env";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { supabase } from "@/utils/supabase";
 import { GiftedChat } from "react-native-gifted-chat";
@@ -45,7 +45,7 @@ const AIAssistance = () => {
     };
     setMessages((prevMessages) => GiftedChat.append(prevMessages, [message]));
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       const { email } = await client.getUserDetails();
       let { data: Category, error } = await supabase
@@ -89,7 +89,7 @@ const AIAssistance = () => {
   return (
     <KeyboardAvoidingView behavior="padding" className="flex-1">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1 p-5 bg-white">
+        <View className="flex-1 p-5 bg-[#e0e3f9]">
           <View className="flex-1 justify-center">
             <GiftedChat
               messages={messages}

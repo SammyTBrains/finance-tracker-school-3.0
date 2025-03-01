@@ -78,7 +78,7 @@ const Profile = () => {
   }
 
   return (
-    <View className="flex-1 p-5 justify-center items-center gap-4">
+    <View className="flex-1 p-5 justify-center items-center gap-4 bg-[#e0e3f9]">
       <View className="flex flex-row items-center justify-center gap-2">
         <Image
           source={{ uri: user?.picture }}
@@ -92,7 +92,7 @@ const Profile = () => {
         </Text>
         <Text className="font-[outfit-bold] text-xl">
           Categories:{" "}
-          <Text className="font-[outfit]">{categoryList.length}</Text>
+          <Text className="font-[outfit]">{categoryList?.length}</Text>
         </Text>
         <Text className="font-[outfit-bold] text-xl">
           Total Items:{" "}
@@ -100,7 +100,7 @@ const Profile = () => {
         </Text>
       </View>
       <TouchableOpacity
-        className="bg-primary p-[15px] rounded-[10px]"
+        className="bg-[#2032f4] p-[15px] rounded-[10px]"
         onPress={handleLogout}
       >
         <View className="items-center justify-center">
