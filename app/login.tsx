@@ -18,7 +18,9 @@ const LoginScreen = () => {
   };
 
   const handleSignIn = async () => {
+    console.log("BEFORE!!");
     const token = await client.login();
+    console.log("AFTER!!");
     if (token) {
       // User was authenticated
       await services.storeData("login", "true");

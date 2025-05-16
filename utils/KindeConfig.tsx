@@ -5,7 +5,7 @@ import { YOUR_KINDE_CLIENT_ID } from "../env";
 
 export const client = new KindeSDK(
   "https://elohiminnovations.kinde.com",
-  "exp://192.168.242.222:8081",
+  "exp://192.168.0.3:8081",
   YOUR_KINDE_CLIENT_ID,
-  "exp://192.168.242.222:8081"
+  "exp://192.168.0.3:8081"
 );
