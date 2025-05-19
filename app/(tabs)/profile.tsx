@@ -6,17 +6,20 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import { supabase } from "@/utils/supabase";
-import { client } from "@/utils/KindeConfig";
-import { UserProfile } from "@kinde-oss/react-native-sdk-0-7x";
+import { useKindeAuth } from "@kinde/expo";
+import { getUserProfile } from "@kinde/expo/utils";
+import { UserProfile } from "@kinde/expo/utils";
 import services from "@/utils/services";
 import { router, useFocusEffect } from "expo-router";
 import colors from "@/components/myApp/colors";
 import { CategoryData, CategoryItem } from "@/utils/types";
 
 const Profile = () => {
-  const [user, setUser] = useState<UserProfile>();
+  const [user, setUser] = useState<UserProfile | null>();
+  const kinde = useKindeAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [categoryList, setCategoryList] = useState<CategoryData[]>([]);
   const [totalCategoryItems, setTotalCategoryItems] = useState(0);
@@ -31,20 +34,21 @@ const Profile = () => {
     }, [])
   );
 
-  const firstNameModified = `${user?.given_name
-    .charAt(0)
-    .toUpperCase()}${user?.given_name.slice(1)}`;
-  const lastNameModified = `${user?.family_name
-    .charAt(0)
-    .toUpperCase()}${user?.family_name.slice(1)}`;
+  const firstNameModified = `${user?.givenName
+    ?.charAt(0)
+    .toUpperCase()}${user?.givenName?.slice(1)}`;
+  const lastNameModified = `${user?.familyName
+    ?.charAt(0)
+    .toUpperCase()}${user?.familyName?.slice(1)}`;
 
   const getData = async () => {
     setIsLoading(true);
-    const user = await client.getUserDetails();
+    const userProfile = await getUserProfile();
+    console.log("User profile:", userProfile);
     let { data: Category, error } = await supabase
       .from("Category")
       .select("*,CategoryItems(*)")
-      .eq("created_by", user.email);
+      .eq("created_by", userProfile?.email);
 
     let totalCategoryItems = 0;
     const GottenCategory = Category as CategoryData[];
@@ -53,14 +57,14 @@ const Profile = () => {
     });
 
     setTotalCategoryItems(totalCategoryItems);
-    setUser(user);
+    setUser(userProfile);
     setCategoryList(GottenCategory as CategoryData[]);
     setIsLoading(false);
   };
 
   const handleLogout = async () => {
     setIsLoading(true);
-    const loggedOut = await client.logout();
+    const loggedOut = await kinde.logout({ revokeToken: true });
     if (loggedOut) {
       // User was logged out
       await services.storeData("login", "false");
@@ -71,45 +75,39 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size={"large"} color={colors.primary} />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 p-5 justify-center items-center gap-4 bg-[#e0e3f9]">
-      <View className="flex flex-row items-center justify-center gap-2">
-        <Image
-          source={{ uri: user?.picture }}
-          className="w-[80px] h-[80px] rounded-full"
-        />
-        <Text className="text-xl font-[outfit-bold] ">{`${firstNameModified} ${lastNameModified}`}</Text>
-      </View>
-      <View className="mt-5 bg-white p-5 rounded-2xl shadow-sm">
-        <Text className="font-[outfit-bold] text-xl">
-          Email: <Text className="font-[outfit]">{user?.email}</Text>
+    <View style={styles.container}>
+      <View style={styles.profileHeader}>
+        <Image source={{ uri: user?.picture }} style={styles.profileImage} />
+        <Text style={styles.profileName}>
+          {`${firstNameModified} ${lastNameModified}`}
         </Text>
-        <Text className="font-[outfit-bold] text-xl">
+      </View>
+      <View style={styles.statsContainer}>
+        <Text style={styles.statHeading}>
+          Email: <Text style={styles.statValue}>{user?.email}</Text>
+        </Text>
+        <Text style={styles.statHeading}>
           Categories:{" "}
-          <Text className="font-[outfit]">{categoryList?.length}</Text>
+          <Text style={styles.statValue}>{categoryList?.length}</Text>
         </Text>
-        <Text className="font-[outfit-bold] text-xl">
+        <Text style={styles.statHeading}>
           Total Items:{" "}
-          <Text className="font-[outfit]">{totalCategoryItems}</Text>
+          <Text style={styles.statValue}>{totalCategoryItems}</Text>
         </Text>
       </View>
-      <TouchableOpacity
-        className="bg-[#2032f4] p-[15px] rounded-[10px]"
-        onPress={handleLogout}
-      >
-        <View className="items-center justify-center">
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <View style={styles.buttonContent}>
           {isLoading ? (
             <ActivityIndicator color="white" size={"small"} />
           ) : (
-            <Text className="text-white font-[outfit-bold] text-center text-base ">
-              Logout
-            </Text>
+            <Text style={styles.buttonText}>Logout</Text>
           )}
         </View>
       </TouchableOpacity>
@@ -118,3 +116,61 @@ const Profile = () => {
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
+    backgroundColor: "#e0e3f9",
+  },
+  profileHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  profileName: {
+    fontSize: 20,
+    fontFamily: "outfit-bold",
+  },
+  statsContainer: {
+    marginTop: 20,
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  statHeading: {
+    fontFamily: "outfit-bold",
+    fontSize: 20,
+    marginBottom: 8,
+  },
+  statValue: {
+    fontFamily: "outfit",
+  },
+  logoutButton: {
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 10,
+  },
+  buttonContent: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "outfit-bold",
+    fontSize: 16,
+  },
+});

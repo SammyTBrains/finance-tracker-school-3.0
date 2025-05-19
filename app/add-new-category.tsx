@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
@@ -50,55 +51,42 @@ const AddNewCategory = () => {
   };
 
   return (
-    <View className="mt-5 p-5">
-      <View className="justify-center items-center">
+    <View style={styles.container}>
+      <View style={styles.colorPickerContainer}>
         <TextInput
-          className="text-center text-3xl p-5 rounded-full px-7 text-white font-[outfit-medium]"
-          style={{ backgroundColor: selectedColor }}
+          style={[styles.iconInput, { backgroundColor: selectedColor }]}
           maxLength={2}
-          onChangeText={(value) => setSelectedIcon(value)}
+          onChangeText={setSelectedIcon}
         >
           {selectedIcon}
         </TextInput>
         <ColorPicker
           selectedColor={selectedColor}
-          setSelectedColor={(color) => setSelectedColor(color)}
+          setSelectedColor={setSelectedColor}
         />
       </View>
-      {/* Add category name and total budget section */}
-      <View className="flex flex-row border gap-[5px] rounded-[10px] p-[14px] border-grey bg-white items-center mt-5">
-        <MaterialIcons name="local-offer" size={24} color={"grey"} />
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="local-offer" size={24} color="grey" />
         <TextInput
           placeholder="Category Name"
-          placeholderTextColor={"grey"}
-          onChangeText={(value) => setCategoryName(value)}
-          className="w-full text-[17px] font-[outfit]"
+          placeholderTextColor="grey"
+          onChangeText={setCategoryName}
+          style={styles.input}
         />
       </View>
-
-      <View className="flex flex-row border gap-[5px] rounded-[10px] p-[14px] border-grey bg-white items-center mt-5">
-        <FontAwesome6 name="naira-sign" size={24} color={"grey"} />
-        <TextInput
-          placeholder="Total Budget"
-          placeholderTextColor={"grey"}
-          keyboardType="numeric"
-          onChangeText={(value) => setTotalBudget(value)}
-          className="w-full text-[17px] font-[outfit]"
-        />
-      </View>
-
       <TouchableOpacity
-        className="bg-primary p-[15px] rounded-[10px] mt-[30px]"
+        style={[
+          styles.createButton,
+          (!categoryName || !totalBudget) && styles.disabledButton,
+        ]}
+        onPress={onCreateCategory}
         disabled={!categoryName || !totalBudget || isLoading}
-        onPress={() => onCreateCategory()}
       >
-        <View className="items-center justify-center">
+        <View style={styles.buttonContent}>
           {isLoading ? (
-            <ActivityIndicator color="white" size={"large"} />
+            <ActivityIndicator color="white" size="large" />
           ) : (
-            <Text className="text-white font-[outfit-bold] text-center text-base ">
-              Create
-            </Text>
+            <Text style={styles.buttonText}>Create</Text>
           )}
         </View>
       </TouchableOpacity>
@@ -107,3 +95,57 @@ const AddNewCategory = () => {
 };
 
 export default AddNewCategory;
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+    padding: 20,
+  },
+  colorPickerContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  iconInput: {
+    textAlign: "center",
+    fontSize: 24,
+    padding: 20,
+    borderRadius: 100,
+    paddingHorizontal: 28,
+    color: "white",
+    fontFamily: "outfit-medium",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    gap: 5,
+    borderWidth: 1,
+    borderColor: colors.grey,
+    borderRadius: 10,
+    padding: 14,
+    backgroundColor: "white",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  input: {
+    width: "100%",
+    fontSize: 17,
+    fontFamily: "outfit",
+  },
+  createButton: {
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 30,
+  },
+  disabledButton: {
+    opacity: 0.6,
+  },
+  buttonContent: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "outfit-bold",
+    fontSize: 16,
+  },
+});

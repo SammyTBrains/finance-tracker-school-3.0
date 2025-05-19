@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import colors from "./colors";
 
 type ColorPickerProps = {
@@ -8,20 +8,37 @@ type ColorPickerProps = {
 
 const ColorPicker = (props: ColorPickerProps) => {
   return (
-    <View className="flex flex-row gap-5 mt-5">
+    <View style={styles.container}>
       {colors.COLOR_LIST.map((color, index) => (
         <TouchableOpacity
           key={index}
-          className="h-[30px] w-[30px] rounded-full"
           style={[
+            styles.colorButton,
             { backgroundColor: color },
-            color === props.selectedColor && { borderWidth: 4 },
+            color === props.selectedColor && styles.selectedButton,
           ]}
           onPress={() => props.setSelectedColor(color)}
-        ></TouchableOpacity>
+        />
       ))}
     </View>
   );
 };
 
 export default ColorPicker;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    gap: 20,
+    marginTop: 20,
+  },
+  colorButton: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+  },
+  selectedButton: {
+    borderWidth: 4,
+    borderColor: "white",
+  },
+});

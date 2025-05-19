@@ -2,7 +2,7 @@ import { client } from "@/utils/KindeConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { UserProfile } from "@kinde-oss/react-native-sdk-0-7x";
 import { useEffect, useState } from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, View, StyleSheet } from "react-native";
 
 const Header = () => {
   const [user, setUser] = useState<UserProfile>();
@@ -21,22 +21,46 @@ const Header = () => {
     .toUpperCase()}${user?.given_name.slice(1)}`;
 
   return (
-    <View className="flex flex-row items-center gap-2">
-      <Image
-        source={{ uri: user?.picture }}
-        className="w-[50px] h-[50px] rounded-full"
-      />
-      <View className="flex flex-row items-center justify-between w-[85%]">
+    <View style={styles.container}>
+      <Image source={{ uri: user?.picture }} style={styles.profileImage} />
+      <View style={styles.headerContent}>
         <View>
-          <Text className="text-white text-base font-[outfit]">Welcome,</Text>
-          <Text className="text-white text-xl font-[outfit-bold] ">
-            {modifiedName}
-          </Text>
+          <Text style={styles.welcomeText}>Welcome,</Text>
+          <Text style={styles.userName}>{modifiedName}</Text>
         </View>
-        <Ionicons name="notifications" size={24} color={"white"} />
+        <Ionicons name="notifications" size={24} color="white" />
       </View>
     </View>
   );
 };
 
 export default Header;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  headerContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "85%",
+  },
+  welcomeText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "outfit",
+  },
+  userName: {
+    color: "white",
+    fontSize: 20,
+    fontFamily: "outfit-bold",
+  },
+});

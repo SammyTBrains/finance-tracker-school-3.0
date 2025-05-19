@@ -15,6 +15,7 @@ import {
   RefreshControl,
   ScrollView,
   View,
+  StyleSheet,
 } from "react-native";
 
 export default function Home() {
@@ -40,33 +41,52 @@ export default function Home() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size={"large"} color={colors.primary} />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 mt-5 bg-[#e0e3f9]">
+    <View style={styles.container}>
       <ScrollView
         refreshControl={
-          <RefreshControl
-            onRefresh={() => getCategoryList()}
-            refreshing={loading}
-          />
+          <RefreshControl onRefresh={getCategoryList} refreshing={loading} />
         }
       >
-        <View className="p-5 bg-[#2032f4] h-[150px]">
+        <View style={styles.headerContainer}>
           <Header />
         </View>
-        <View className="p-5 -mt-20">
+        <View style={styles.contentContainer}>
           <CircularChart categoryList={categoryList} />
           <CategoryList categoryList={categoryList} />
         </View>
       </ScrollView>
-      <Link href={"/add-new-category"} className="absolute bottom-4 right-4">
+      <Link href={"/add-new-category"} style={styles.addButton}>
         <Ionicons name="add-circle" size={64} color={colors.primary} />
       </Link>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+    backgroundColor: "#e0e3f9",
+  },
+  headerContainer: {
+    padding: 20,
+    backgroundColor: colors.primary,
+    height: 150,
+  },
+  contentContainer: {
+    padding: 20,
+    marginTop: -80,
+  },
+  addButton: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+  },
+});

@@ -1,10 +1,11 @@
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { CategoryData, CategoryItem } from "@/utils/types";
 import { Ionicons } from "@expo/vector-icons";
 import { formatAmount } from "@/utils/functions";
 import { supabase } from "@/utils/supabase";
 import { useRouter } from "expo-router";
+import colors from "../colors";
 
 type CourseInfoProps = {
   categoryData: CategoryData;
@@ -67,35 +68,31 @@ export default function CourseInfo(props: CourseInfoProps) {
 
   return (
     <View>
-      <View className="flex flex-row justify-between items-center mt-5">
-        <View className="justify-center items-baseline">
+      <View style={styles.headerContainer}>
+        <View style={styles.iconContainer}>
           <Text
-            className="text-4xl font-[outfit-medium] p-5 overflow-hidden"
-            style={{
-              backgroundColor: props.categoryData.color,
-              borderRadius: 15,
-            }}
+            style={[
+              styles.iconText,
+              { backgroundColor: props.categoryData.color },
+            ]}
           >
             {props.categoryData.icon}
           </Text>
         </View>
-        <View className="flex-1 ml-5">
-          <Text className="font-[outfit-bold] text-2xl">
-            {props.categoryData?.name}
-          </Text>
-          <Text className="font-[outfit] text-[16px]">
+        <View style={styles.textContainer}>
+          <Text style={styles.categoryName}>{props.categoryData?.name}</Text>
+          <Text style={styles.itemCount}>
             {props.categoryData?.CategoryItems.length} Items
           </Text>
         </View>
-        <TouchableOpacity onPress={() => onDeleteCategory()}>
+        <TouchableOpacity onPress={onDeleteCategory}>
           <Ionicons name="trash" size={24} color="red" />
         </TouchableOpacity>
       </View>
-      {/* Progress Bar */}
-      <View className="flex flex-row justify-between mt-4">
-        <Text className="font-[outfit-bold]">{totalCost}</Text>
-        <Text className="font-[outfit]">
-          {"Total Budget: "}
+      <View style={styles.progressContainer}>
+        <Text style={styles.totalCost}>{totalCost}</Text>
+        <Text style={styles.budgetText}>
+          Total Budget:{" "}
           {props.categoryData.assigned_budget.toLocaleString("en-NG", {
             style: "currency",
             currency: "NGN", // Change to Nigerian Naira
@@ -103,12 +100,64 @@ export default function CourseInfo(props: CourseInfoProps) {
           })}
         </Text>
       </View>
-      <View className="w-full h-[15px] bg-grey rounded-full mt-2">
-        <View
-          className="bg-primary h-full rounded-full"
-          style={{ width: `${percentageTotal}%` }}
-        ></View>
+      <View style={styles.progressBar}>
+        <View style={[styles.progressFill, { width: `${percentageTotal}%` }]} />
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  iconContainer: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  iconText: {
+    fontSize: 40,
+    padding: 20,
+    borderRadius: 15,
+    overflow: "hidden",
+    fontFamily: "outfit-medium",
+  },
+  textContainer: {
+    flex: 1,
+    marginLeft: 20,
+  },
+  categoryName: {
+    fontFamily: "outfit-bold",
+    fontSize: 24,
+  },
+  itemCount: {
+    fontFamily: "outfit",
+    fontSize: 16,
+  },
+  progressContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 16,
+  },
+  totalCost: {
+    fontFamily: "outfit-bold",
+  },
+  budgetText: {
+    fontFamily: "outfit",
+  },
+  progressBar: {
+    width: "100%",
+    height: 15,
+    backgroundColor: colors.grey,
+    borderRadius: 100,
+    marginTop: 8,
+  },
+  progressFill: {
+    backgroundColor: colors.primary,
+    height: "100%",
+    borderRadius: 100,
+  },
+});

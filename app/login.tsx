@@ -1,15 +1,17 @@
-import { client } from "@/utils/KindeConfig";
+import colors from "@/components/myApp/colors";
 import services from "@/utils/services";
 import { useRouter } from "expo-router";
-import { Button, Image, Text, TouchableOpacity, View } from "react-native";
+import { useKindeAuth } from "@kinde/expo";
+import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 const loginBg = require("./../assets/images/myApp/bgmobileapp3.jpg");
 
 const LoginScreen = () => {
   const router = useRouter();
+  const kinde = useKindeAuth();
 
   const handleSignUp = async () => {
-    const token = await client.register();
+    const token = await kinde.register({});
     if (token) {
       // User was authenticated
       await services.storeData("login", "true");
@@ -18,9 +20,7 @@ const LoginScreen = () => {
   };
 
   const handleSignIn = async () => {
-    console.log("BEFORE!!");
-    const token = await client.login();
-    console.log("AFTER!!");
+    const token = await kinde.login({});
     if (token) {
       // User was authenticated
       await services.storeData("login", "true");
@@ -29,32 +29,24 @@ const LoginScreen = () => {
   };
 
   return (
-    <View className="flex items-center">
-      <Image source={loginBg} className="h-[400px] w-full" />
-      <View className="bg-primary w-full h-full p-5 -m-[30px] rounded-tl-[20px] rounded-tr-[20px]">
-        <Text className="text-[35px] font-[outfit-bold] text-center text-white">
-          Personal Finance and Budget Planner
-        </Text>
-        <Text className="text-[18px] text-center text-white mt-5 font-[outfit] ">
+    <View style={styles.container}>
+      <Image source={loginBg} style={styles.backgroundImage} />
+      <View style={styles.contentContainer}>
+        <Text style={styles.title}>Personal Finance and Budget Planner</Text>
+        <Text style={styles.subtitle}>
           Stay on Track, Event by Event: The Best Way to Manage Your Finances
         </Text>
-
-        <TouchableOpacity
-          className="bg-white p-5 px-[5px] rounded-full mt-[30px]"
-          onPress={handleSignIn}
-        >
-          <Text className="text-center text-primary font-[outfit-bold] ">
-            Login
-          </Text>
+        <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
+          <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
-        <View className="flex flex-row justify-center items-center mt-3">
-          <Text className="font-[outfit]">Don't have an account? </Text>
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>Don't have an account? </Text>
           <TouchableOpacity onPress={handleSignUp}>
-            <Text className="text-secondary font-[outfit-bold] ">Signup</Text>
+            <Text style={styles.signupLink}>Signup</Text>
           </TouchableOpacity>
         </View>
-        <Text className="text-[13px] text-grey mt-[10px] text-center font-[outfit] ">
-          Start your journey to financial statbiltiy
+        <Text style={styles.footerText}>
+          Start your journey to financial stability
         </Text>
       </View>
     </View>
@@ -62,3 +54,66 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+  },
+  backgroundImage: {
+    height: 400,
+    width: "100%",
+  },
+  contentContainer: {
+    backgroundColor: colors.primary,
+    width: "100%",
+    height: "100%",
+    padding: 20,
+    marginTop: -30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  title: {
+    fontSize: 35,
+    fontFamily: "outfit-bold",
+    color: "white",
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 18,
+    color: "white",
+    textAlign: "center",
+    marginTop: 20,
+    fontFamily: "outfit",
+  },
+  loginButton: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 100,
+    marginTop: 30,
+  },
+  loginButtonText: {
+    color: colors.primary,
+    fontFamily: "outfit-bold",
+    textAlign: "center",
+  },
+  signupContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  signupText: {
+    fontFamily: "outfit",
+  },
+  signupLink: {
+    color: colors.secondary,
+    fontFamily: "outfit-bold",
+  },
+  footerText: {
+    fontSize: 13,
+    color: colors.grey,
+    marginTop: 10,
+    textAlign: "center",
+    fontFamily: "outfit",
+  },
+});

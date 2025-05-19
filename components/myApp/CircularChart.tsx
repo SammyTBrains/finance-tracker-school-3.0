@@ -1,7 +1,7 @@
 import { CategoryData } from "@/utils/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import PieChart from "react-native-pie-chart";
 import colors from "./colors";
 
@@ -60,53 +60,87 @@ const CircularChart = (props: CircularChartProps) => {
   };
 
   return (
-    <View className="mt-5 bg-white p-5 rounded-2xl shadow-sm">
-      <Text className="text-xl font-[outfit] ">
+    <View style={styles.container}>
+      <Text style={styles.title}>
         Total Estimate:{" "}
-        <Text className="font-[outfit-bold]">{calculatedTotalCost}</Text>
+        <Text style={styles.boldText}>{calculatedTotalCost}</Text>
       </Text>
-      <View className="flex flex-row gap-10 -mt-6">
+      <View style={styles.chartContainer}>
         <PieChart
-          widthAndHeight={widthAndHeight}
+          widthAndHeight={150}
           series={values}
           sliceColor={sliceColor}
           coverRadius={0.65}
-          coverFill={"#FFF"}
+          coverFill="#FFF"
         />
-        {props.categoryList?.length === 0 ? (
-          <View className="flex flex-row gap-[2px] items-center">
-            <MaterialCommunityIcons
-              name="checkbox-blank-circle"
-              size={24}
-              color={"#e0e1e2"}
-            />
-            <Text className="font-[outfit]">NA</Text>
-          </View>
-        ) : (
-          <View>
-            {props.categoryList?.map(
+        <View style={styles.legendContainer}>
+          {props.categoryList?.length === 0 ? (
+            <View style={styles.legendItem}>
+              <MaterialCommunityIcons
+                name="checkbox-blank-circle"
+                size={24}
+                color="#e0e1e2"
+              />
+              <Text style={styles.legendText}>NA</Text>
+            </View>
+          ) : (
+            props.categoryList?.map(
               (category, index) =>
                 index <= 4 && (
-                  <View
-                    key={index}
-                    className="flex flex-row gap-[2px] items-center"
-                  >
+                  <View key={index} style={styles.legendItem}>
                     <MaterialCommunityIcons
                       name="checkbox-blank-circle"
                       size={24}
                       color={colors.COLOR_LIST[index]}
                     />
-                    <Text className="font-[outfit]">
+                    <Text style={styles.legendText}>
                       {index < 4 ? category.name : "Other"}
                     </Text>
                   </View>
                 )
-            )}
-          </View>
-        )}
+            )
+          )}
+        </View>
       </View>
     </View>
   );
 };
 
 export default CircularChart;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  title: {
+    fontSize: 20,
+    fontFamily: "outfit",
+  },
+  boldText: {
+    fontFamily: "outfit-bold",
+  },
+  chartContainer: {
+    flexDirection: "row",
+    gap: 40,
+    marginTop: -24,
+  },
+  legendContainer: {
+    justifyContent: "center",
+  },
+  legendItem: {
+    flexDirection: "row",
+    gap: 2,
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  legendText: {
+    fontFamily: "outfit",
+  },
+});

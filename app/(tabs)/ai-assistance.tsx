@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  StyleSheet,
 } from "react-native";
 import axios from "axios";
 import { client } from "@/utils/KindeConfig";
@@ -87,10 +88,10 @@ const AIAssistance = () => {
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" className="flex-1">
+    <KeyboardAvoidingView behavior="padding" style={styles.keyboardAvoiding}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1 p-5 bg-[#e0e3f9]">
-          <View className="flex-1 justify-center">
+        <View style={styles.container}>
+          <View style={styles.chatContainer}>
             <GiftedChat
               messages={messages}
               renderInputToolbar={() => null}
@@ -98,29 +99,27 @@ const AIAssistance = () => {
               minInputToolbarHeight={0}
             />
           </View>
-          <View className="p-3 border flex flex-row items-center rounded-xl border-greyDarker">
-            <View className="flex flex-row items-center gap-[5px]">
+          <View style={styles.inputContainer}>
+            <View style={styles.inputWrapper}>
               <Ionicons name="pencil" size={24} color={colors.greyDarker} />
               <TextInput
                 placeholder="Enter a message..."
                 placeholderTextColor={colors.greyDarker}
                 numberOfLines={3}
                 multiline={true}
-                onChangeText={(value) => setUserMessage(value)}
-                className="font-[outfit] text-[17px] w-[70%] h-full"
+                onChangeText={setUserMessage}
+                style={styles.inputField}
               />
             </View>
             <TouchableOpacity
-              className="bg-primary p-[15px] rounded-[10px]"
+              style={styles.sendButton}
               onPress={handleUserMessage}
             >
-              <View className="items-center justify-center">
+              <View style={styles.buttonContent}>
                 {isLoading ? (
                   <ActivityIndicator color="white" size={"small"} />
                 ) : (
-                  <Text className="text-white font-[outfit-bold] text-center text-base ">
-                    Send
-                  </Text>
+                  <Text style={styles.buttonText}>Send</Text>
                 )}
               </View>
             </TouchableOpacity>
@@ -132,3 +131,53 @@ const AIAssistance = () => {
 };
 
 export default AIAssistance;
+
+const styles = StyleSheet.create({
+  keyboardAvoiding: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#e0e3f9",
+  },
+  chatContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  inputContainer: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.greyDarker,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    flex: 1,
+  },
+  inputField: {
+    fontFamily: "outfit",
+    fontSize: 17,
+    width: "70%",
+    height: "100%",
+  },
+  sendButton: {
+    backgroundColor: colors.primary,
+    padding: 15,
+    borderRadius: 10,
+  },
+  buttonContent: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "outfit-bold",
+    textAlign: "center",
+    fontSize: 16,
+  },
+});

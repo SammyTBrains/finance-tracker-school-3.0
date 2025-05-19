@@ -3,7 +3,15 @@ import { supabase } from "@/utils/supabase";
 import { CategoryData, CategoryItem } from "@/utils/types";
 import { EvilIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Linking,
+  StyleSheet,
+} from "react-native";
+import colors from "../colors";
 
 type CourseItemListProps = {
   categoryData: CategoryData;
@@ -29,42 +37,27 @@ export default function CourseItemList(props: CourseItemListProps) {
   };
 
   return (
-    <View className="mt-5">
-      <Text className="font-[outfit-bold] text-xl">Item List</Text>
-
-      <View className="mt-4">
+    <View style={styles.container}>
+      <Text style={styles.title}>Item List</Text>
+      <View style={styles.listContainer}>
         {props.categoryData.CategoryItems?.length > 0 ? (
-          props.categoryData.CategoryItems.map((item: CategoryItem, index) => (
+          props.categoryData.CategoryItems.map((item, index) => (
             <TouchableOpacity
               key={index}
               onPress={() =>
-                setExpandItem((indexPrev) => {
-                  if (indexPrev === index) {
-                    return undefined;
-                  } else {
-                    return index;
-                  }
-                })
+                setExpandItem((prev) => (prev === index ? undefined : index))
               }
-              className="mt-3"
+              style={styles.itemContainer}
             >
-              <View className="flex flex-row justify-between items-center">
-                <Image
-                  source={{ uri: item.image }}
-                  className="w-[90px] h-[90px] rounded-2xl"
-                />
-                <View className="flex-1 ml-3">
-                  <Text className="text-xl font-[outfit-bold]">
-                    {item.name}
-                  </Text>
-                  <Text
-                    className="font-[outfit] text-greyDarker"
-                    numberOfLines={2}
-                  >
+              <View style={styles.itemContent}>
+                <Image source={{ uri: item.image }} style={styles.itemImage} />
+                <View style={styles.textContainer}>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.itemUrl} numberOfLines={2}>
                     {item.url}
                   </Text>
                 </View>
-                <Text className="text-base ml-3 font-[outfit-bold]">
+                <Text style={styles.itemCost}>
                   {item.cost.toLocaleString("en-NG", {
                     style: "currency",
                     currency: "NGN", // Change to Nigerian Naira
@@ -73,7 +66,7 @@ export default function CourseItemList(props: CourseItemListProps) {
                 </Text>
               </View>
               {expandItem === index && (
-                <View className="flex flex-row gap-3 justify-end">
+                <View style={styles.actionsContainer}>
                   <TouchableOpacity onPress={() => onDeleteItem(item.id)}>
                     <EvilIcons name="trash" size={34} color="red" />
                   </TouchableOpacity>
@@ -82,17 +75,75 @@ export default function CourseItemList(props: CourseItemListProps) {
                   </TouchableOpacity>
                 </View>
               )}
-              {props.categoryData.CategoryItems.length - 1 != index && (
-                <View className="border-[.5px] mt-3 border-grey"></View>
+              {index !== props.categoryData.CategoryItems.length - 1 && (
+                <View style={styles.separator} />
               )}
             </TouchableOpacity>
           ))
         ) : (
-          <Text className="font-[outfit-bold] text-2xl text-grey">
-            No Item Found
-          </Text>
+          <Text style={styles.emptyText}>No Item Found</Text>
         )}
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+  },
+  title: {
+    fontFamily: "outfit-bold",
+    fontSize: 20,
+    marginBottom: 16,
+  },
+  listContainer: {
+    marginTop: 16,
+  },
+  itemContainer: {
+    marginTop: 12,
+  },
+  itemContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  itemImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 16,
+  },
+  textContainer: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  itemName: {
+    fontSize: 20,
+    fontFamily: "outfit-bold",
+  },
+  itemUrl: {
+    fontFamily: "outfit",
+    color: colors.greyDarker,
+  },
+  itemCost: {
+    fontSize: 16,
+    fontFamily: "outfit-bold",
+    marginLeft: 12,
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "flex-end",
+    marginTop: 8,
+  },
+  separator: {
+    borderBottomWidth: 0.5,
+    borderColor: colors.grey,
+    marginTop: 12,
+  },
+  emptyText: {
+    fontFamily: "outfit-bold",
+    fontSize: 24,
+    color: colors.grey,
+  },
+});

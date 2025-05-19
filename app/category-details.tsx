@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  StyleSheet,
 } from "react-native";
 
 export default function CategoryDetails() {
@@ -53,17 +54,17 @@ export default function CategoryDetails() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center">
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size={"large"} color={colors.primary} />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 p-5 mt-5 bg-white">
+    <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Ionicons name="arrow-back-circle" size={44} color={"black"} />
+          <Ionicons name="arrow-back-circle" size={44} color="black" />
         </TouchableOpacity>
         <CourseInfo categoryData={categoryData} />
         <CourseItemList
@@ -71,16 +72,29 @@ export default function CategoryDetails() {
           setUpdateRecord={() => getCategoryDetail()}
         />
       </ScrollView>
-
       <Link
         href={{
           pathname: "/add-new-category-item",
           params: { categoryId: categoryData.id },
         }}
-        className="absolute bottom-4 right-4"
+        style={styles.addButton}
       >
         <Ionicons name="add-circle" size={60} color={colors.primary} />
       </Link>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    marginTop: 20,
+    backgroundColor: "white",
+  },
+  addButton: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+  },
+});

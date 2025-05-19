@@ -1,6 +1,6 @@
 import { CategoryItem } from "@/utils/types";
 import { useRouter } from "expo-router";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 type CategoryListProps = {
   categoryList: any[] | null;
@@ -40,37 +40,34 @@ export default function CategoryList(props: CategoryListProps) {
   };
 
   return (
-    <View className="mt-5">
-      <Text className="font-[outfit-bold] text-[25px] mb-4">Latest Budget</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Latest Budget</Text>
       <View>
         {props.categoryList?.map((category, index) => (
           <TouchableOpacity
             key={index}
             onPress={() => onCategoryClick(category)}
-            className="flex flex-row gap-[10px] items-center bg-white p-[10px] rounded-[15px] shadow-sm mb-4"
+            style={styles.categoryItem}
           >
-            <View className="justify-center items-baseline">
+            <View style={styles.iconContainer}>
               <Text
-                className="text-[35px] p-[16px] font-[outfit-medium] overflow-hidden"
-                style={{
-                  borderRadius: 16,
-                  backgroundColor: category.color,
-                }}
+                style={[
+                  styles.categoryIcon,
+                  { backgroundColor: category.color },
+                ]}
               >
                 {category.icon}
               </Text>
             </View>
-            <View className="flex flex-row items-center justify-between w-[70%]">
+            <View style={styles.categoryInfo}>
               <View>
-                <Text className="font-[outfit-bold] text-xl">
-                  {category.name}
-                </Text>
-                <Text className="font-[outfit]">
-                  {category?.CategoryItems?.length} Items
+                <Text style={styles.categoryName}>{category.name}</Text>
+                <Text style={styles.itemCount}>
+                  {category.CategoryItems?.length} Items
                 </Text>
               </View>
-              <Text className="font-[outfit-bold] text-[17px]">
-                {calculateTotalCost(category?.CategoryItems)}
+              <Text style={styles.categoryCost}>
+                {calculateTotalCost(category.CategoryItems)}
               </Text>
             </View>
           </TouchableOpacity>
@@ -79,3 +76,56 @@ export default function CategoryList(props: CategoryListProps) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 20,
+  },
+  title: {
+    fontFamily: "outfit-bold",
+    fontSize: 25,
+    marginBottom: 16,
+  },
+  categoryItem: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 16,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  iconContainer: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  categoryIcon: {
+    fontSize: 35,
+    padding: 16,
+    borderRadius: 16,
+    overflow: "hidden",
+    fontFamily: "outfit-medium",
+  },
+  categoryInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "70%",
+  },
+  categoryName: {
+    fontFamily: "outfit-bold",
+    fontSize: 20,
+  },
+  itemCount: {
+    fontFamily: "outfit",
+  },
+  categoryCost: {
+    fontFamily: "outfit-bold",
+    fontSize: 17,
+  },
+});

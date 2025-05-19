@@ -3,6 +3,8 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { KindeAuthProvider } from "@kinde/expo";
+import { YOUR_KINDE_CLIENT_ID } from "@/env";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,7 +26,14 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <KindeAuthProvider
+      config={{
+        domain: "https://elohiminnovations.kinde.com", // Required
+        clientId: YOUR_KINDE_CLIENT_ID, // Required
+        // Optional (default: "openid profile email offline")
+        scopes: "openid profile email offline",
+      }}
+    >
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
@@ -45,6 +54,6 @@ export default function RootLayout() {
         />
       </Stack>
       <CheckAuth />
-    </>
+    </KindeAuthProvider>
   );
 }

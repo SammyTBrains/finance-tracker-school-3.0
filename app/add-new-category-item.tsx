@@ -11,6 +11,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
 import colors from "@/components/myApp/colors";
@@ -94,28 +95,25 @@ export default function AddNewCatrgoryItem() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
+      style={styles.keyboardAvoiding}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView className="p-5 bg-white">
-          <View className="items-baseline">
-            <TouchableOpacity onPress={() => onImagePicker()}>
-              <Image
-                source={{ uri: previewImage }}
-                className="w-[150px] h-[150px] rounded-2xl bg-grey"
-              />
+        <ScrollView contentContainerStyle={styles.container}>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity onPress={onImagePicker}>
+              <Image source={{ uri: previewImage }} style={styles.image} />
             </TouchableOpacity>
           </View>
-          <View className="p-3 border flex flex-row gap-[5px] items-center rounded-xl border-greyDarker mt-3 ">
+          <View style={styles.inputContainer}>
             <Ionicons name="pricetag" size={24} color={colors.greyDarker} />
             <TextInput
               placeholder="Item name"
               placeholderTextColor={colors.greyDarker}
-              onChangeText={(value) => setName(value)}
-              className="font-[outfit] text-[17px] w-[85%] h-full"
+              onChangeText={setName}
+              style={styles.input}
             />
           </View>
-          <View className="p-3 border flex flex-row gap-[5px] items-center rounded-xl border-greyDarker mt-3">
+          <View style={styles.inputContainer}>
             <FontAwesome6
               name="naira-sign"
               size={24}
@@ -126,19 +124,19 @@ export default function AddNewCatrgoryItem() {
               placeholderTextColor={colors.greyDarker}
               keyboardType="numeric"
               onChangeText={(value) => setCost(value)}
-              className="font-[outfit] text-[17px] w-[85%] h-full"
+              style={styles.input}
             />
           </View>
-          <View className="p-3 border flex flex-row gap-[5px] items-center rounded-xl border-greyDarker mt-3">
+          <View style={styles.inputContainer}>
             <Ionicons name="link" size={24} color={colors.greyDarker} />
             <TextInput
               placeholder="Url"
               placeholderTextColor={colors.greyDarker}
               onChangeText={(value) => setUrl(value)}
-              className="font-[outfit] text-[17px] w-[85%] h-full"
+              style={styles.input}
             />
           </View>
-          <View className="p-3 border flex flex-row gap-[5px] items-center rounded-xl border-greyDarker mt-3">
+          <View style={styles.inputContainer}>
             <Ionicons name="pencil" size={24} color={colors.greyDarker} />
             <TextInput
               placeholder="Note"
@@ -146,21 +144,22 @@ export default function AddNewCatrgoryItem() {
               numberOfLines={3}
               multiline={true}
               onChangeText={(value) => setNote(value)}
-              className="font-[outfit] text-[17px] w-[85%] h-full"
+              style={styles.input}
             />
           </View>
           <TouchableOpacity
+            style={[
+              styles.addButton,
+              (!name || !cost) && styles.disabledButton,
+            ]}
+            onPress={onClickAdd}
             disabled={!name || !cost || isLoading}
-            className="bg-primary p-4 rounded-full mt-6"
-            onPress={() => onClickAdd()}
           >
-            <View className="items-center justify-center">
+            <View style={styles.buttonContent}>
               {isLoading ? (
-                <ActivityIndicator color="white" size={"large"} />
+                <ActivityIndicator color="white" size="large" />
               ) : (
-                <Text className="text-center font-[outfit-bold] text-white">
-                  Add
-                </Text>
+                <Text style={styles.buttonText}>Add</Text>
               )}
             </View>
           </TouchableOpacity>
@@ -169,3 +168,55 @@ export default function AddNewCatrgoryItem() {
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  keyboardAvoiding: {
+    flex: 1,
+  },
+  container: {
+    padding: 20,
+    backgroundColor: "white",
+  },
+  imageContainer: {
+    alignItems: "flex-start",
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 16,
+    backgroundColor: colors.grey,
+  },
+  inputContainer: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.greyDarker,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    marginTop: 12,
+  },
+  input: {
+    fontFamily: "outfit",
+    fontSize: 17,
+    width: "85%",
+    height: "100%",
+  },
+  addButton: {
+    backgroundColor: colors.primary,
+    padding: 16,
+    borderRadius: 100,
+    marginTop: 24,
+  },
+  disabledButton: {
+    opacity: 0.6,
+  },
+  buttonContent: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontFamily: "outfit-bold",
+  },
+});
