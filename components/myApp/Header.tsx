@@ -19,13 +19,13 @@ const Header = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: user?.picture }} style={styles.profileImage} />
+      {/* <Image source={{ uri: user?.picture }} style={styles.profileImage} /> */}
       <View style={styles.headerContent}>
         <View>
           <Text style={styles.welcomeText}>Welcome,</Text>
           <Text style={styles.userName}>{modifiedName}</Text>
         </View>
-        <Ionicons name="notifications" size={24} color="white" />
+        {/* <Ionicons name="notifications" size={24} color="white" /> */}
       </View>
     </View>
   );
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "85%",
+    width: "100%",
   },
   welcomeText: {
     color: "white",

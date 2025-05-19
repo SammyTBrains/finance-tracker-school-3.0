@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   chartContainer: {
     flexDirection: "row",
     gap: 40,
-    marginTop: -24,
+    marginTop: 14,
   },
   legendContainer: {
     justifyContent: "center",
