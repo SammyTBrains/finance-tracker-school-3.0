@@ -74,6 +74,16 @@ const AddNewCategory = () => {
           style={styles.input}
         />
       </View>
+      <View style={styles.inputContainer}>
+        <FontAwesome6 name="naira-sign" size={24} color="grey" />
+        <TextInput
+          placeholder="Total Budget"
+          placeholderTextColor={"grey"}
+          keyboardType="numeric"
+          onChangeText={(value) => setTotalBudget(value)}
+          style={styles.input}
+        />
+      </View>
       <TouchableOpacity
         style={[
           styles.createButton,
