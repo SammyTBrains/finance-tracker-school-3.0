@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { supabase } from "@/utils/supabase";
-import { client } from "@/utils/KindeConfig";
+import services from "@/utils/services";
 import { useRouter } from "expo-router";
 
 const AddNewCategory = () => {
@@ -26,7 +26,7 @@ const AddNewCategory = () => {
 
   const onCreateCategory = async () => {
     setIsLoading(true);
-    const { email } = await client.getUserDetails();
+    const email = (await services.getData("userEmail")) || "";
     const { data, error } = await supabase
       .from("Category")
       .insert([

@@ -20,6 +20,7 @@ import { GOOGLE_API_KEY, OPENAI_API_KEY } from "../../env";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { supabase } from "@/utils/supabase";
 import { GiftedChat } from "react-native-gifted-chat";
+import services from "@/utils/services";
 
 const AIAssistance = () => {
   const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
@@ -48,7 +49,7 @@ const AIAssistance = () => {
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      const { email } = await client.getUserDetails();
+      const email = (await services.getData("userEmail")) || "";
       let { data: Category, error } = await supabase
         .from("Category")
         .select("*,CategoryItems(*)")

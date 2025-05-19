@@ -1,24 +1,21 @@
-import { client } from "@/utils/KindeConfig";
+import services from "@/utils/services";
 import { Ionicons } from "@expo/vector-icons";
-import { UserProfile } from "@kinde-oss/react-native-sdk-0-7x";
 import { useEffect, useState } from "react";
 import { Image, Text, View, StyleSheet } from "react-native";
 
 const Header = () => {
-  const [user, setUser] = useState<UserProfile>();
+  const [user, setUser] = useState<any>();
 
   useEffect(() => {
     getUserData();
   }, []);
 
   const getUserData = async () => {
-    const user = await client.getUserDetails();
+    const user = (await services.getData("userEmail")) || "";
     setUser(user);
   };
 
-  const modifiedName = `${user?.given_name
-    .charAt(0)
-    .toUpperCase()}${user?.given_name.slice(1)}`;
+  const modifiedName = `${user}`;
 
   return (
     <View style={styles.container}>

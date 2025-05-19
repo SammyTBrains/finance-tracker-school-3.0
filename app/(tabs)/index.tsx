@@ -2,7 +2,6 @@ import CategoryList from "@/components/myApp/CategoryList";
 import CircularChart from "@/components/myApp/CircularChart";
 import colors from "@/components/myApp/colors";
 import Header from "@/components/myApp/Header";
-import { client } from "@/utils/KindeConfig";
 import services from "@/utils/services";
 import { supabase } from "@/utils/supabase";
 import { CategoryData } from "@/utils/types";
@@ -28,7 +27,8 @@ export default function Home() {
 
   const getCategoryList = async () => {
     setLoading(true);
-    const { email } = await client.getUserDetails();
+    const email = (await services.getData("userEmail")) || "";
+    console.log("email", email);
     let { data: Category, error } = await supabase
       .from("Category")
       .select("*,CategoryItems(*)")

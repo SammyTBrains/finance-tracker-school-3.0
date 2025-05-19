@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import colors from "@/components/myApp/colors";
 import services from "@/utils/services";
@@ -31,33 +33,41 @@ const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Image source={loginBg} style={styles.backgroundImage} />
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>Personal Finance and Budget Planner</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Image source={loginBg} style={styles.backgroundImage} />
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>Personal Finance and Budget Planner</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
-          placeholderTextColor={colors.greyDarker}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your email"
+            placeholderTextColor={colors.greyDarker}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={handleLogin}
-          disabled={!email.trim()}
-        >
-          <Text style={styles.loginButtonText}>Continue</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            disabled={!email.trim()}
+          >
+            <Text style={styles.loginButtonText}>Continue</Text>
+          </TouchableOpacity>
 
-        <Text style={styles.footerText}>
-          Start your journey to financial stability
-        </Text>
-      </View>
+          <Text style={styles.footerText}>
+            Start your journey to financial stability
+          </Text>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
