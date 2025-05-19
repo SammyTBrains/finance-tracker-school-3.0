@@ -1,62 +1,70 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
 import colors from "@/components/myApp/colors";
 import services from "@/utils/services";
 import { useRouter } from "expo-router";
-import { useKindeAuth } from "@kinde/expo";
-import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 const loginBg = require("./../assets/images/myApp/bgmobileapp3.jpg");
 
 const LoginScreen = () => {
   const router = useRouter();
-  const kinde = useKindeAuth();
+  const [email, setEmail] = useState("");
 
-  const handleSignUp = async () => {
-    const token = await kinde.register({});
-    if (token) {
-      // User was authenticated
-      await services.storeData("login", "true");
-      router.replace("/");
-    }
-  };
+  const handleLogin = async () => {
+    if (!email.trim()) return; // Simple validation
 
-  const handleSignIn = async () => {
-    const token = await kinde.login({});
-    if (token) {
-      // User was authenticated
-      await services.storeData("login", "true");
-      router.replace("/");
-    }
+    // Store both login state and email
+    await Promise.all([
+      services.storeData("login", "true"),
+      services.storeData("userEmail", email.trim()),
+    ]);
+
+    router.replace("/");
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <Image source={loginBg} style={styles.backgroundImage} />
       <View style={styles.contentContainer}>
         <Text style={styles.title}>Personal Finance and Budget Planner</Text>
-        <Text style={styles.subtitle}>
-          Stay on Track, Event by Event: The Best Way to Manage Your Finances
-        </Text>
-        <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
-          <Text style={styles.loginButtonText}>Login</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          placeholderTextColor={colors.greyDarker}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={handleLogin}
+          disabled={!email.trim()}
+        >
+          <Text style={styles.loginButtonText}>Continue</Text>
         </TouchableOpacity>
-        <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.signupLink}>Signup</Text>
-          </TouchableOpacity>
-        </View>
+
         <Text style={styles.footerText}>
           Start your journey to financial stability
         </Text>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
-export default LoginScreen;
-
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
   },
   backgroundImage: {
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: colors.primary,
     width: "100%",
-    height: "100%",
+    flex: 1,
     padding: 20,
     marginTop: -30,
     borderTopLeftRadius: 20,
@@ -77,43 +85,36 @@ const styles = StyleSheet.create({
     fontFamily: "outfit-bold",
     color: "white",
     textAlign: "center",
-  },
-  subtitle: {
-    fontSize: 18,
-    color: "white",
-    textAlign: "center",
     marginTop: 20,
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 40,
     fontFamily: "outfit",
+    fontSize: 16,
   },
   loginButton: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 100,
-    marginTop: 30,
+    backgroundColor: colors.secondary,
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    opacity: 1,
   },
   loginButtonText: {
-    color: colors.primary,
+    color: "white",
     fontFamily: "outfit-bold",
     textAlign: "center",
-  },
-  signupContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 12,
-  },
-  signupText: {
-    fontFamily: "outfit",
-  },
-  signupLink: {
-    color: colors.secondary,
-    fontFamily: "outfit-bold",
+    fontSize: 16,
   },
   footerText: {
     fontSize: 13,
     color: colors.grey,
-    marginTop: 10,
+    marginTop: 20,
     textAlign: "center",
     fontFamily: "outfit",
   },
 });
+
+export default LoginScreen;
