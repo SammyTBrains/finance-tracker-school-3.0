@@ -142,5 +142,6 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontFamily: "outfit",
+    width: 80,
   },
 });

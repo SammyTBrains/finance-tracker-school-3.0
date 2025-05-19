@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontFamily: "outfit-bold",
+    width: 120,
     fontSize: 20,
   },
   itemCount: {
@@ -126,6 +127,7 @@ const styles = StyleSheet.create({
   },
   categoryCost: {
     fontFamily: "outfit-bold",
+    width: "50%",
     fontSize: 17,
   },
 });
