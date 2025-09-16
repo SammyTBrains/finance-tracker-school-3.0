@@ -1,8 +1,0 @@
-// env.ts
-export const YOUR_KINDE_CLIENT_ID = "b719a027843c4de18b757ef0189bc196";
-export const SUPABASE_URL = "https://wnymblrgngpxtgbkbuxi.supabase.co";
-export const SUPABASE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndueW1ibHJnbmdweHRnYmtidXhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwMjAyNDAsImV4cCI6MjA3MzU5NjI0MH0.dljtb7XszO0ZdEs0rmjLUcj8rUVBpYB0-H7jJDVBa7g";
-export const OPENAI_API_KEY =
-  "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";
-export const GOOGLE_API_KEY = "AIzaSyBG9nsXaAFr-dQEOE79uaMXGbkiLHb_K-A";
