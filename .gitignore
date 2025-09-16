@@ -9,7 +9,18 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+# Environment files (keep secrets out of git)
 env.tsx
+env.ts
+env.*.ts
+env.*.tsx
+.env
+.env.*
+*.env
+
+# Track example files explicitly
+!env.example.ts
+!env.example.tsx
 
 # macOS
 .DS_Store
