@@ -9,16 +9,21 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import colors from "@/components/myApp/colors";
 import services from "@/utils/services";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const loginBg = require("./../assets/images/myApp/bgmobileapp3.jpg");
 
 const LoginScreen = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const insets = useSafeAreaInsets();
+  const keyboardOffset = (Platform.OS === "ios" ? insets.top : 0) + 80;
 
   const handleLogin = async () => {
     if (!email.trim()) return; // Simple validation
@@ -36,37 +41,48 @@ const LoginScreen = () => {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={keyboardOffset}
     >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 24 }}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
       >
-        <Image source={loginBg} style={styles.backgroundImage} />
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>Personal Finance and Budget Planner</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{ flex: 1 }}>
+            <Image source={loginBg} style={styles.backgroundImage} />
+            <View style={styles.contentContainer}>
+              <Text style={styles.title}>
+                Personal Finance and Budget Planner
+              </Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email"
-            placeholderTextColor={colors.greyDarker}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your email"
+                placeholderTextColor={colors.greyDarker}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                returnKeyType="done"
+                onSubmitEditing={handleLogin}
+                blurOnSubmit
+              />
 
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={handleLogin}
-            disabled={!email.trim()}
-          >
-            <Text style={styles.loginButtonText}>Continue</Text>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={handleLogin}
+                disabled={!email.trim()}
+              >
+                <Text style={styles.loginButtonText}>Continue</Text>
+              </TouchableOpacity>
 
-          <Text style={styles.footerText}>
-            Start your journey to financial stability
-          </Text>
-        </View>
+              <Text style={styles.footerText}>
+                Start your journey to financial stability
+              </Text>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </ScrollView>
     </KeyboardAvoidingView>
   );

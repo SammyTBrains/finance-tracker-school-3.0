@@ -57,6 +57,11 @@ export default function AddNewCatrgoryItem() {
     const uniqueFileName = Date.now();
 
     // Upload image to storage
+    console.log("[AddItem] Starting storage upload", {
+      uniqueFileName,
+      hasBase64: !!image,
+      previewSet: previewImage !== placeholder,
+    });
     const { data, error } = await supabase.storage
       .from("images")
       .upload(uniqueFileName + ".png", decode(image), {
@@ -64,18 +69,32 @@ export default function AddNewCatrgoryItem() {
       });
 
     if (error) {
-      console.log("THE ERROR", error);
+      console.error("[AddItem] Storage upload error", error);
+      Alert.alert(
+        "Upload failed",
+        `${
+          error.message || "Unknown error"
+        }\nIf this mentions row-level security, add a Storage policy to allow INSERT on bucket 'images'.`
+      );
+      setIsLoading(false);
+      return;
     } else {
-      console.log("Upload successful:", data);
+      console.log("[AddItem] Storage upload success", data);
     }
 
     if (data) {
-      const fileURL =
-        "https://lxmtsutndsakztpwpmxn.supabase.co/storage/v1/object/public/images/" +
-        uniqueFileName +
-        ".png";
+      // Build a public URL dynamically for the new project
+      const pubRes = supabase.storage.from("images").getPublicUrl(data.path);
+      const fileURL = pubRes?.data?.publicUrl;
+      if (!fileURL) {
+        console.error("[AddItem] getPublicUrl returned empty", pubRes);
+        Alert.alert("Public URL error", "Could not get public URL");
+        setIsLoading(false);
+        return;
+      }
+      console.log("[AddItem] Public URL", fileURL);
 
-      const { data: CategoryItem, error } = await supabase
+      const { data: CategoryItem, error: insertErr } = await supabase
         .from("CategoryItems")
         .insert({
           name,
@@ -87,6 +106,14 @@ export default function AddNewCatrgoryItem() {
         })
         .select();
 
+      if (insertErr) {
+        console.error("[AddItem] CategoryItems insert error", insertErr);
+        Alert.alert("Save failed", insertErr.message || "Could not save item");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log("[AddItem] CategoryItems insert success", CategoryItem);
       setIsLoading(false);
       router.back();
     }

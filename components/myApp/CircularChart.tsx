@@ -49,14 +49,22 @@ const CircularChart = (props: CircularChartProps) => {
       })
     );
 
-    sliceColorArray.push(colors.COLOR_LIST[4]);
-    valuesArray.push(otherCost);
+    // Only add the "Other" slice if it actually has a value
+    if (otherCost > 0) {
+      sliceColorArray.push(colors.COLOR_LIST[4]);
+      valuesArray.push(otherCost);
+    }
+
+    const sum = valuesArray.reduce((a, b) => a + b, 0);
+    if (sum <= 0) {
+      // No data at all: show a neutral placeholder slice and keep arrays in sync
+      setSliceColor([colors.grey]);
+      setValues([1]);
+      return;
+    }
+
     setSliceColor(sliceColorArray);
     setValues(valuesArray);
-    // Add a check to ensure that the series prop is not an array of values that sum up to zero
-    if (valuesArray.reduce((a, b) => a + b, 0) === 0) {
-      setValues([1]); // or some other default value
-    }
   };
 
   return (

@@ -47,7 +47,7 @@ const AIAssistance = () => {
     };
     setMessages((prevMessages) => GiftedChat.append(prevMessages, [message]));
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const email = (await services.getData("userEmail")) || "";
       let { data: Category, error } = await supabase
